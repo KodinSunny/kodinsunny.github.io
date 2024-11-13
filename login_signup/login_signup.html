@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up & Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000;
+            /* Black background */
+        }
+
+        .container {
+            position: relative;
+            width: 90%;
+            /* Responsive width */
+            max-width: 800px;
+            /* Maintains a max width */
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            /* Prevent overflow for smaller screens */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            width: 100%;
+            /* Full width for the form containers */
+            transition: 0.6s ease;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            /* Adjusted padding */
+            width: 100%;
+            /* Full width */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: fantasy;
+            letter-spacing: 1px;
+        }
+
+        input {
+            border: none;
+            background-color: #eee;
+            padding: 12px;
+            margin: 8px 0;
+            width: 100%;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.379);
+        }
+
+        input:hover {
+            box-shadow: 0px 5px 15px rgba(212, 44, 1, 0.456);
+        }
+
+        button {
+            border: none;
+            padding: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: #ff5e57;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            transition: background-color 0.3s, letter-spacing 0.3s, width 0.3s;
+        }
+
+        button:hover {
+            background-color: #fb5148;
+            letter-spacing: 1px;
+            width: 80%;
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            background-color: #000000;
+            /* Black background for overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.6s ease;
+        }
+
+        .overlay {
+            background: linear-gradient(360deg, rgba(30, 30, 30, 0.8), rgba(0, 0, 0, 0.8));
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: row;
+            text-align: center;
+            color: white;
+            padding: 0 40px;
+            height: 100%;
+            width: 100%;
+        }
+
+        .overlay-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay-left {
+            text-align: left;
+        }
+
+        .overlay-right {
+            text-align: right;
+        }
+
+        .overlay-panel button {
+            border: 1px solid rgb(0, 0, 0);
+            background-color: rgba(240, 16, 16, 0.911);
+            color: rgb(255, 255, 255);
+        }
+
+        .right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+                /* Stack forms on small screens */
+                width: 100%;
+            }
+
+            .overlay-container {
+                width: 100%;
+                /* Full width for the overlay on small screens */
+                left: 0;
+                /* Align the overlay to the left */
+            }
+
+            .overlay {
+                flex-direction: column;
+                /* Stack overlay panels on small screens */
+                padding: 20px;
+                /* Reduced padding for smaller screens */
+            }
+
+            form {
+                padding: 30px;
+                /* Reduced padding for forms on smaller screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form id="signup-form" action="/login/process_signup.php" method="POST"> <!-- Removed action attribute -->
+                <h1>Create Account</h1>
+                <input type="text" placeholder="Name" id="name" name="name" required />
+                <input type="email" placeholder="Email" id="email" name="email" required />
+                <input type="password" placeholder="Password" id="pass" name="password" required />
+                <button type="submit">SIGN UP</button>
+            </form>
+        </div>
+
+        <div class="form-container login-container">
+            <form id="login-form" action="/login/process_login.php" method="POST"> <!-- Added ID for JavaScript handling -->
+                <h1>Login</h1>
+                <input type="email" placeholder="Email" id="login-email" name="email" required />
+                <input type="password" placeholder="Password" id="login-password" name="password" required />
+                <button type="submit">LOGIN</button>
+            </form>
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us, please login with your personal info</p>
+                    <button class="ghost" id="login">LOGIN</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your details and start your journey with us</p>
+                    <button class="ghost" id="signUp">SIGN UP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const loginButton = document.getElementById('login');
+        const container = document.getElementById('container');
+
+        signUpButton.addEventListener('click', () => {
+            container.classList.remove('right-panel-active');
+        });
+
+        loginButton.addEventListener('click', () => {
+            container.classList.add('right-panel-active');
+        });
+
+        // Using Fetch API for AJAX submission
+        document.getElementById('signup-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            const formData = new FormData(this);
+            fetch('/signup', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => {
+                    if (response.redirected) {
+                        // If the response is a redirect, navigate to the URL
+                        window.location.href = response.url;
+                    } else {
+                        return response.text();
+                    }
+                })
+                .then(data => {
+                    alert(data); // Display any messages returned from the server
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            const formData = new FormData(this);
+            fetch('/login', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => {
+                    if (response.redirected) {
+                        // If the response is a redirect, navigate to the URL
+                        window.location.href = response.url;
+                    } else {
+                        return response.text();
+                    }
+                })
+                .then(data => {
+                    alert(data); // Display any messages returned from the server
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    </script>
+</body>
+
+</html>

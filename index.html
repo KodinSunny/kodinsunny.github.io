@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pranav's Website</title>
+  <link rel="icon" href="static/images/me.jpg" type="image/x-icon">
+  <link rel="shortcut icon" href="static/images/me.jpg" type="image/x-icon">
+  <link rel="icon" type="image/png" href="static/images/me.jpg">
+  <link rel="stylesheet" href="static/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H72L8XEPB4"></script>
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+    data-id="pranavkodin" data-description="Support me on Buy me a coffee!" data-message="" data-color="#FF5F5F"
+    data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-H72L8XEPB4');
+  </script>
+</head>
+
+<body onload="fetchComments()">
+  <div id="loginbanner">
+    <div id="button_holder">
+      <div id="menu-button" onclick="toggleSidebar()"><svg id="menu" xmlns="http://www.w3.org/2000/svg" width="16"
+          height="16" fill="currentColor" class="bi bi-menu-button" viewBox="0 0 16 16">
+          <path
+            d="M0 1.5A1.5 1.5 0 0 1 1.5 0h8A1.5 1.5 0 0 1 11 1.5v2A1.5 1.5 0 0 1 9.5 5h-8A1.5 1.5 0 0 1 0 3.5zM1.5 1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5z" />
+          <path
+            d="m7.823 2.823-.396-.396A.25.25 0 0 1 7.604 2h.792a.25.25 0 0 1 .177.427l-.396.396a.25.25 0 0 1-.354 0M0 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm1 3v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2zm14-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2zM2 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5" />
+        </svg></div>
+      <button class="nav-button" onclick="window.location.href='./login_signup/login_signup.html'"> LOGIN </button>
+    </div>
+  </div>
+  <div class="hero">
+    <h2><i>Hey guys, Welcome to the</i></h2>
+    <div class="typewriter">
+      <h1>
+        <span class="hover-effect">Webpage</span>
+        <span class="hover-effect highlight">of</span>
+        <span class="hover-effect">Pranav</span>
+        <span class="hover-effect">Kumar.</span>
+      </h1>
+    </div>
+  </div>
+  <div class="sidebar menu">
+    <br />
+    <br />
+    <h3 style="font-family: 'Courier New', Courier, monospace;">Heymahodaye.site</h3>
+    <button onclick="tooglecomments()" class="cta-button">Comments</button>
+    <a href="Downloadables/sunny.cmd" download="windows_office_activator.cmd">
+    <button type="button" class="cta-button">Download Sunny</button></a>
+  
+  </div>
+  <div class="sidebar comments">
+    <h2>Public Comments</h2>
+    <div id="comment-section">
+      <textarea id="commentContent" placeholder="Type your comment here..."></textarea>
+      <input type="text" id="username" placeholder="Your Name">
+      <button onclick="submitComment()">Post Comment</button>
+      <div id="comments" class="comments-container"></div>
+      <button onclick="tooglecomments()" class="cta-button close-comments">close</button>
+    </div>
+  </DIV>
+  <div class="orbit-text">
+    <img src="static/images/subsribe_youtube.png" alt="Jerry" />
+    <span id="yt_links">
+      <a href="https://www.youtube.com/@pranavkodin">Pranav Kodin</a><br />
+      <a href="https://www.youtube.com/@whypranavplayz">Pranav Playz</a>
+    </span>
+  </div>
+
+  <div id="scroll_holder">
+    <div class="scroll-container english-french">
+      <div class="scroll-text">
+        <span id="orange">Bienvenue sur la page web ! • </span><span id="white">Добро
+          пожаловать на веб-страницу! • </span><span id="orange">Welcome to the webpage! • </span><span
+          id="white">Bienvenue
+          sur la page web ! • </span><span id="orange">Добро пожаловать на веб-страницу! • </span><span
+          id="white">Welcome
+          to
+          the webpage! • </span><span id="orange">Bienvenue sur la page web ! • </span><span id="white">Добро
+          пожаловать
+          на
+          веб-страницу! • </span><span id="orange">Welcome to the webpage! • </span><span id="white">Bienvenue sur la
+          page
+          web
+          ! • </span>
+      </div>
+    </div>
+    <div class="scroll-container hindi-japanese">
+      <div class="scroll-text">
+        <span id="orange">ウェブページへようこそ！ • </span><span id="white">مرحبًا بك في صفحة
+          الويب! • </span><span id="orange">वेबपेज पर आपका स्वागत है! • </span><span id="white">ウェブページへようこそ！ •
+        </span><span id="orange">مرحبًا بك في صفحة الويب! • </span><span id="white">वेबपेज पर आपका स्वागत है! •
+        </span><span id="orange">ウェブページへようこそ！ • </span><span id="white">مرحبًا بك في صفحة الويب! • </span><span
+          id="orange">वेबपेज पर
+          आपका स्वागत है! • </span><span id="white">ウェブページへようこそ！ • </span><span id="orange">مرحبًا بك في صفحة الويب! •
+        </span>
+
+      </div>
+    </div>
+  </div>
+  <div id="pets">
+    <div class="card" id="left">
+      <img src="static/images/dog.jpg" alt="Jerry" />
+      <h3>Pranav Kodin</h3>
+      <p>Want to code without confusion, 👨‍💻 Join me for coding tutorials, fun projects, and easy tips that make
+        programming a piece of cake (or at least a little less confusing 🍰). From Python 🐍 to web magic 🌐,So grab
+        your keyboard, mouse, and let’s code something awesome together! 🚀🎉
+      </p>
+      <button class="cta-button" onclick="window.location.href='./know more/know_more.html'"> KNOW MORE </button>
+    </div>
+    <div class="card" id="right">
+      <img src="static/images/cat.jpg" alt="Tom" />
+      <h3>Pranav Playz</h3>
+      <p>Want to game without the rage quits? 😆 Join me for epic gameplay, funny moments, and tips to level up your
+        skills! From intense action games 🎯 to hilarious fails 🤦‍♂️, grab your controller and let’s have a blast
+        together! 🚀🎉 And hey, don’t forget to hit that subscribe button for more fun! 🔔
+      </p>
+      <button class="cta-button" onclick="window.location.href='./youtube_pages/pranav_playz/index.html'"> KNOW MORE </button>
+    </div>
+  </div>
+  <br />
+  <br />
+  <div id="lines">
+    <h4>kyaa hi velle log ho iss website pe aaye</h4>
+    <h6>ab aa hi gaye to contact me on follwing platforms</h6>
+  </div>
+  <div class="social_media">
+    <ul class="socialmediaico">
+      <a href="https://www.facebook.com/hey.mahodaye/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+      <a href="https://x.com/pranavk38351492" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+      <a href="https://www.instagram.com/hey.mahodaye" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://www.youtube.com/@jarvisff933" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+      <a href="https://www.linkedin.com/in/pranav-kumar-a3178530a/" target="_blank"><i
+          class="fa-brands fa-linkedin"></i></a>
+      <a href="https://github.com/PranavKodin/" target="_blank"><i class="fa-brands fa-github"></i></a>
+      <a href="https://www.reddit.com/user/wtf_pranav/" target="_blank"><i class="fa-brands fa-reddit"></i></a>
+      <a href="https://www.snapchat.com/add/wtf-pranav?share_id=vyrwKxcTeuA&locale=en-IN" target="_blank"><i
+          class="fa-brands fa-snapchat"></i></a>
+      <a href="https://discord.com/users/733690477148373093" target="_blank"><i class="fa-brands fa-discord"></i></a>
+    </ul>
+  </div>
+  <style>
+    a {
+      color: rgb(255, 255, 255);
+    }
+  </style>
+  <audio id="hoverSound" src="static/sounds/sound.mp3" preload="auto"></audio>
+  <audio id="socialmediahoverSound" src="static/sounds/socialmediahover.wav" preload="auto"></audio>
+  <audio id="buttonclickSound" src="static/sounds/click.mp3" preload="auto"></audio>
+  <script src="static/js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"></script>
+  <script>
+    const myUsername = "Sunny"; // Set your username here exactly as it appears in the database
+
+    async function fetchComments() {
+      try {
+        const response = await fetch('http://localhost/api/comments');
+        const comments = await response.json();
+
+        // Target the div to display comments
+        const commentsDiv = document.getElementById('comments');
+        commentsDiv.innerHTML = ''; // Clear any existing comments
+
+        // Loop through and add each comment
+        comments.forEach(comment => {
+          const commentElement = document.createElement('div');
+          commentElement.classList.add('comment-item');  // Add any class you want for styling
+
+          // Inner HTML for each comment with a delete button for your username
+          commentElement.innerHTML = `
+                <p><strong>${comment.username}:</strong> ${comment.content}</p>
+                ${comment.username === myUsername ?
+              `<button onclick="deleteComment(${comment.id})">Delete</button>` : ''}
+            `;
+
+          commentsDiv.appendChild(commentElement);
+        });
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    }
+
+  </script>
+</body>
+
+</html>
