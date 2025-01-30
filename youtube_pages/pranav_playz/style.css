@@ -121,8 +121,24 @@ body {
     padding: 50px 0;
     background-color: #000000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    background-image: url('headerbg.jpg'); /* Path to your background image */
+    background-size: cover;
+    background-position: center;
+    position: relative; /* This allows for content positioning */
+    height: fit-content;
   }
-
+  
+  .content {
+    position: relative;
+    z-index: 1; /* Ensures content appears above the background */
+    backdrop-filter: blur(3px); /* Apply blur effect to the background */
+    background-color: rgba(255, 255, 255, 0); /* Semi-transparent background to allow the blur */
+    padding: 20px;
+    border-radius: 10px;
+    color: white; /* Adjust text color as needed */
+  }
+  
+  
   header h1 {
     font-size: 3em;
     color: #ffffff;
