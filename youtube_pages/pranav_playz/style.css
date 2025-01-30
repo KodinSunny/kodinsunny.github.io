@@ -10,7 +10,7 @@ body {
 
   body.light-theme {
     background-color: #ffffff;
-    color: #1f1f1f;
+    
   }
 
   body.light-theme header,
@@ -20,7 +20,7 @@ body {
 
   body.light-theme .btn {
     background: #444;
-    color: #fff;
+    color: #000000;
   }
 
   body.light-theme .btn:hover {
@@ -29,12 +29,26 @@ body {
 
   body.light-theme #hero {
     background: #f9f9f9;
+    color: #000000;
   }
+
+  body.light-theme h1 {
+    background: #f9f9f9;
+    color: #000000;
+  }
+
+  body.light-theme p {
+    background: #f9f9f9;
+    color: #000000;}
+    
+    body.light-theme h3 {
+      background: #f9f9f9;
+      color: #000000;}
 
   body.light-theme #contact input,
   body.light-theme #contact textarea {
     background: #f1f1f1;
-    color: #1f1f1f;
+    color: #000000;
     border-color: #ddd;
   }
 
@@ -200,13 +214,12 @@ body {
 
   /* Navigation Bar */
   nav {
-    background-color: #000000;
+    background-color: #131212;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    top: -100px; /* Initially hidden */
     left: 0;
     right: 0;
     transition: top 0.3s ease;
