@@ -28,21 +28,17 @@ body {
   }
 
   body.light-theme #hero {
-    background: #f9f9f9;
     color: #000000;
   }
 
   body.light-theme h1 {
-    background: #f9f9f9;
     color: #000000;
   }
 
-  body.light-theme p {
-    background: #f9f9f9;
+  body.light-theme  header p {
     color: #000000;}
     
     body.light-theme h3 {
-      background: #f9f9f9;
       color: #000000;}
 
   body.light-theme #contact input,
