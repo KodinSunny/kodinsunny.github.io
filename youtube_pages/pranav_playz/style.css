@@ -1,0 +1,310 @@
+/* General Styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #121212; /* Dark theme as default */
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  body.light-theme {
+    background-color: #ffffff;
+    color: #1f1f1f;
+  }
+
+  body.light-theme header,
+  body.light-theme footer {
+    background-color: #f1f1f1;
+  }
+
+  body.light-theme .btn {
+    background: #444;
+    color: #fff;
+  }
+
+  body.light-theme .btn:hover {
+    background: #666;
+  }
+
+  body.light-theme #hero {
+    background: #f9f9f9;
+  }
+
+  body.light-theme #contact input,
+  body.light-theme #contact textarea {
+    background: #f1f1f1;
+    color: #1f1f1f;
+    border-color: #ddd;
+  }
+
+/* Theme Toggle Switch */
+.theme-toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px; /* Reduced width */
+    height: 24px; /* Reduced height */
+  }
+  
+  .theme-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .theme-toggle-label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #444;
+    border-radius: 24px; /* Adjusted to match height */
+    transition: background-color 0.3s ease;
+  }
+  
+  .theme-toggle-label:before {
+    position: absolute;
+    content: "";
+    height: 18px; /* Reduced size */
+    width: 18px; /* Reduced size */
+    left: 3px; /* Adjusted position */
+    bottom: 3px; /* Adjusted position */
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  }
+  
+  .theme-toggle input:checked + .theme-toggle-label {
+    background-color: #FF5F5F;
+  }
+  
+  .theme-toggle input:checked + .theme-toggle-label:before {
+    transform: translateX(16px); /* Adjusted translation */
+  }
+  
+  /* Dark mode adjustments for the toggle */
+  body.dark-theme .theme-toggle-label {
+    background-color: #666;
+  }
+  
+  body.dark-theme .theme-toggle input:checked + .theme-toggle-label {
+    background-color: #FF5F5F;
+  }
+  
+  /* Dark mode adjustments for the toggle */
+  body.dark-theme .theme-toggle-label {
+    background-color: #666;
+  }
+  
+  body.dark-theme .theme-toggle input:checked + .theme-toggle-label {
+    background-color: #FF5F5F;
+  }
+
+  header {
+    text-align: center;
+    padding: 50px 0;
+    background-color: #000000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  header h1 {
+    font-size: 3em;
+    color: #ffffff;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .video-card {
+    position: relative;
+    background-color: #333;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    aspect-ratio: 9 / 16; /* Reels-like aspect ratio */
+  }
+
+  .video-card:hover {
+    transform: scale(1.05);
+  }
+
+  .video-card iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .video-card h3 {
+    text-align: center;
+    padding: 10px;
+    background-color: #444;
+    margin: 0;
+    color: #fff;
+  }
+
+  .stats-container {
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .stats-container h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .stats-container p {
+    font-size: 1.5em;
+    font-family: monospace;
+  }
+
+  .cta-button {
+    background-color: #FF5F5F;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .cta-button:hover {
+    background-color: #e04e4e;
+  }
+
+  #yt_links a {
+    color: #FF5F5F;
+    text-decoration: none;
+    font-size: 1.5em;
+  }
+
+  #yt_links a:hover {
+    text-decoration: underline;
+  }
+
+  img {
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
+  }
+
+  /* Navigation Bar */
+  nav {
+    background-color: #000000;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: -100px; /* Initially hidden */
+    left: 0;
+    right: 0;
+    transition: top 0.3s ease;
+    z-index: 1000;
+    border-radius: 0 0 20px 20px; /* Curved edges at the bottom */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  nav.visible {
+    top: 0; /* Visible when scrolling up */
+  }
+
+  nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1.2em;
+    transition: color 0.3s ease;
+  }
+
+  nav a:hover {
+    color: #FF5F5F;
+  }
+
+  /* Dropdown Menu */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1f1f1f;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .dropdown-content a {
+    color: #ffffff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #333;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  /* Video Thumbnail and Description Section */
+  .video-info-container {
+    display: flex;
+    margin: 20px;
+    padding: 20px;
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .video-thumbnail {
+    flex: 1;
+    margin-right: 20px;
+  }
+
+  .video-thumbnail img {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .video-details {
+    flex: 2;
+  }
+
+  .video-details h2 {
+    margin-top: 0;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .video-details p {
+    font-size: 1.1em;
+    color: #ccc;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+
+  /* Stats Section on the Right */
+  .main-content {
+    display: flex;
+  }
+
+  .video-stats-section {
+    flex: 1;
+    margin: 20px;
+  }
