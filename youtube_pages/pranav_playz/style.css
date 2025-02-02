@@ -37,7 +37,15 @@ body {
 
   body.light-theme  header p {
     color: #000000;}
-    
+
+  body.light-theme  #navbar {
+    background-color: #ffffff;
+    color: #000000;}
+  
+    body.light-theme  #navbar a {
+      background-color: #ffffff;
+      color: #000000;}
+
     body.light-theme h3 {
       color: #000000;}
 

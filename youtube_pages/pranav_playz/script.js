@@ -50,4 +50,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
   });
+  fetch('videos.json')
+  .then(response => response.json())
+  .then(data => {
+    const videoGrid = document.getElementById('videoGrid');
 
+    data.forEach(video => {
+      const videoCard = document.createElement('div');
+      videoCard.classList.add('video-card');
+
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${video.videoId}`;
+      iframe.frameBorder = "0";
+      iframe.allowFullscreen = true;
+
+      const title = document.createElement('h3');
+      title.textContent = video.title;
+
+      videoCard.appendChild(iframe);
+      videoCard.appendChild(title);
+      videoGrid.appendChild(videoCard);
+    });
+  })
+  .catch(error => console.error('Error loading the JSON file:', error));

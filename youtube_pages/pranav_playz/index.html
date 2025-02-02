@@ -28,7 +28,7 @@
 
 <body>
   <nav id="navbar">
-    <div>
+    <div class="navi">
       <a href="#">Home</a>
       <div class="dropdown">
         <a href="#" class="dropbtn">Content <i class="fas fa-caret-down"></i></a>
@@ -40,7 +40,6 @@
       </div>
       <a href="#">About</a>
     </div>
-    <!-- Replace the existing theme button with this -->
 <div class="theme-toggle">
   <input type="checkbox" id="theme-toggle-checkbox" />
   <label for="theme-toggle-checkbox" class="theme-toggle-label">
@@ -91,29 +90,7 @@
 
   <script src="script.js"></script>
   <script>
-    fetch('videos.json')
-      .then(response => response.json())
-      .then(data => {
-        const videoGrid = document.getElementById('videoGrid');
-
-        data.forEach(video => {
-          const videoCard = document.createElement('div');
-          videoCard.classList.add('video-card');
-
-          const iframe = document.createElement('iframe');
-          iframe.src = `https://www.youtube.com/embed/${video.videoId}`;
-          iframe.frameBorder = "0";
-          iframe.allowFullscreen = true;
-
-          const title = document.createElement('h3');
-          title.textContent = video.title;
-
-          videoCard.appendChild(iframe);
-          videoCard.appendChild(title);
-          videoGrid.appendChild(videoCard);
-        });
-      })
-      .catch(error => console.error('Error loading the JSON file:', error));
+    
   </script>
 </body>
 
