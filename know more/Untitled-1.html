@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamerCentral - Game Finder</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('https://source.unsplash.com/1600x900/?gaming,cyberpunk') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .blurred-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+        .search-container {
+            margin: 20px auto;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px;
+            background: #ff4500;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .game-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 600px;
+            box-shadow: 0px 0px 15px rgba(255, 69, 0, 0.7);
+            text-align: left;
+        }
+        .slideshow {
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .slideshow img {
+            max-width: 100%;
+            border-radius: 10px;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide-buttons {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transform: translateY(-50%);
+        }
+        .slide-buttons button {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .game-container:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="blurred-bg"></div>
+    <h1>🔥 GamerCentral - Find Your Next Game</h1>
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Enter game name...">
+        <button onclick="fetchGame()">Search</button>
+    </div>
+    <div id="gameResult" class="game-container fade-in"></div>
+
+    <script>
+        let currentSlide = 0;
+        function nextSlide() {
+            const images = document.querySelectorAll('.slideshow img');
+            images[currentSlide].style.transform = 'translateX(-100%)';
+            currentSlide = (currentSlide + 1) % images.length;
+            images[currentSlide].style.transform = 'translateX(0)';
+        }
+        function prevSlide() {
+            const images = document.querySelectorAll('.slideshow img');
+            images[currentSlide].style.transform = 'translateX(100%)';
+            currentSlide = (currentSlide - 1 + images.length) % images.length;
+            images[currentSlide].style.transform = 'translateX(0)';
+        }
+        async function fetchGame() {
+            const gameName = document.getElementById('search').value;
+            const API_KEY = 'bc7373aa8b7c41d3979dbb53e43dc050';
+            const url = `https://api.rawg.io/api/games?search=${gameName}&key=${API_KEY}`;
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data.results.length > 0) {
+                const game = data.results[0];
+                document.getElementById('gameResult').innerHTML = `
+                    <h2>${game.name}</h2>
+                    <p>🗓️ Released: ${game.released}</p>
+                    <p>⭐ Rating: ${game.rating}</p>
+                    <p>🎮 Platforms: ${game.platforms.map(p => p.platform.name).join(', ')}</p>
+                    <p>🏆 Metacritic Score: ${game.metacritic ? game.metacritic : 'N/A'}</p>
+                    <p>📜 Genres: ${game.genres.map(g => g.name).join(', ')}</p>
+                    <div class="slideshow">
+                        ${game.short_screenshots.map(screenshot => `<img src="${screenshot.image}" alt="Game Image">`).join('')}
+                        <div class="slide-buttons">
+                            <button onclick="prevSlide()">❮</button>
+                            <button onclick="nextSlide()">❯</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('gameResult').innerHTML = "<p>No results found.</p>";
+            }
+        }
+    </script>
+</body>
+</html>
