@@ -84,7 +84,7 @@ async function deleteComment(commentId) {
 window.onload = fetchComments;  
 
 window.onload = function () {
-    commentBox('my-project-id', {
+    commentBox('5703374003503104-proj', {
         backgroundColor: '#000',  // Black background
         textColor: '#FFFFFF'  // White text color
     });
