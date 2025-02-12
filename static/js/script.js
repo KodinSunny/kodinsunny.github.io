@@ -81,4 +81,9 @@ async function deleteComment(commentId) {
 }
 
 // Fetch comments on page load
-window.onload = fetchComments;
+window.onload = fetchComments;  
+
+commentBox('my-project-id', {
+    backgroundColor: '#000',
+    textColor: '#FFFFFF'
+});
