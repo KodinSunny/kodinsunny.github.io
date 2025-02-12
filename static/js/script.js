@@ -89,3 +89,4 @@ window.onload = function () {
         textColor: '#FFFFFF'  // White text color
     });
 };
+
