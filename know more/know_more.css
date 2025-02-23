@@ -38,6 +38,10 @@ body {
     text-align: center;
 }
 
+.card:hover h1 {
+    display: none;
+}
+
 #container {
     background-color: rgba(0, 0, 0, 0.23);
     backdrop-filter: blur(5px);
