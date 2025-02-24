@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <title>Sign Up & Login</title>
 </head>
 
@@ -14,6 +16,11 @@
         padding: 0;
         font-family: 'Arial', sans-serif;
     }
+
+    html, body {
+    overflow: auto !important; /* Prevents SweetAlert2 from changing it */
+}
+
 
     body {
         display: flex;
@@ -145,6 +152,44 @@
         transform: translateX(-100%);
     }
 
+    /* Ensure the modal covers the entire screen */
+    .swal2-container {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(0, 0, 0, 0.6) !important;
+        /* Blurred overlay */
+        backdrop-filter: blur(5px) !important;
+        /* Blur effect */
+        z-index: 9999 !important;
+    }
+
+    /* Center the popup */
+    .swal2-popup {
+        margin: auto !important;
+        transform: translate(0, 0) !important;
+    }
+
+
+    /* Optional: Fade-in animation for smooth appearance */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+
     /* Responsive Styles */
     @media (max-width: 600px) {
         .container {
@@ -179,7 +224,8 @@
         <img id="profile-pic" src="" alt="Profile Picture"
             style="width: 80px; height: 80px; border-radius: 50%; display: none;">
         <h3 id="user-email"></h3>
-        <button id="logout-btn" style="background-color: #ff5e57; color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">LOGOUT</button>
+        <button id="logout-btn"
+            style="background-color: #ff5e57; color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">LOGOUT</button>
     </div>
 
     <div class="container" id="container">
@@ -223,7 +269,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -282,21 +328,50 @@
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
+                // Send email verification
+                await sendEmailVerification(user);
+                Swal.fire({
+                    title: "Verification Email Sent!",
+                    text: "Please check your inbox and verify your email before logging in.",
+                    icon: "info",
+                    confirmButtonText: "OK"
+                });
+
+                // Save user data in Firestore
                 await setDoc(doc(db, "users", user.uid), {
                     name: name,
                     email: email,
                     profilePic: `https://api.dicebear.com/9.x/notionists-neutral/svg?seed=${user.uid}`
                 });
 
-                alert('User registered successfully!');
+                // Success message for registration
+                Swal.fire({
+                    title: "Registration Successful!",
+                    text: "Your account has been created successfully.",
+                    icon: "success",
+                    timer: 5000,
+                    showConfirmButton: true
+                });
+
             } catch (error) {
                 if (error.code === "auth/email-already-in-use") {
-                    alert("This email is already registered. Please login instead.");
+                    Swal.fire({
+                        title: "Email Already in Use",
+                        text: "This email is already registered. Please login instead.",
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    });
                 } else {
-                    alert(error.message);
+                    Swal.fire({
+                        title: "Error!",
+                        text: error.message,
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    });
                 }
             }
         });
+
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -304,25 +379,79 @@
             const password = document.getElementById('login-password').value;
 
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-                alert('User logged in successfully!');
-                window.location.href = "https://www.heymahodaye.site";
-            } catch (error) {
-                if (error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
-                    alert("Invalid credentials. Please check your email and password.");
-                } else {
-                    alert(error.message);
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Check if email is verified
+                if (!user.emailVerified) {
+                    Swal.fire({
+                        title: "Email Not Verified!",
+                        text: "Please verify your email before logging in. Check your inbox!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Send Again",
+                        cancelButtonText: "Cancel"
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            await sendEmailVerification(user); // ✅ Resend verification email
+                            Swal.fire("Verification Sent!", "Check your inbox for the email.", "success");
+                        }
+                    });
+
+                    await signOut(auth);  // Log out the user
+                    setTimeout(() => location.reload(), 10000); // Reload after logout
+                    return;
                 }
+
+                // Show success message & redirect
+                Swal.fire({
+                    title: "Login Successful!",
+                    text: "Welcome back!",
+                    icon: "success",
+                    timer: 5000,
+                    showConfirmButton: true
+                }).then(() => {
+                    window.location.href = "https://www.heymahodaye.site";
+                });
+
+            } catch (error) {
+                let errorMessage = "An error occurred. Please try again.";
+
+                if (error.code === "auth/wrong-password" || error.code === "auth/invalid-login-credentials") {
+                    errorMessage = "Invalid credentials. Please check your email and password.";
+                } else if (error.code === "auth/user-not-found") {
+                    errorMessage = "No account found with this email. Sign up instead!";
+                } else {
+                    errorMessage = error.message; // Show the actual Firebase error
+                }
+
+                Swal.fire({
+                    title: "Login Failed!",
+                    text: errorMessage,
+                    icon: "error"
+                });
             }
         });
 
         logoutBtn.addEventListener('click', async () => {
             try {
                 await signOut(auth);
-                alert('User logged out successfully!');
-                window.location.href = "https://www.heymahodaye.site";
+                Swal.fire({
+                    title: "Logged Out",
+                    text: "You have been logged out successfully!",
+                    icon: "info",
+                    timer: 5000,
+                    showConfirmButton: true
+                }).then(() => {
+                    window.location.href = "https://www.heymahodaye.site";
+                });
+
             } catch (error) {
-                alert('Error logging out: ' + error.message);
+                Swal.fire({
+                    title: "Logout Failed!",
+                    text: error.message,
+                    icon: "error"
+                });
             }
         });
 
