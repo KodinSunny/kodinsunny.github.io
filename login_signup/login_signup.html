@@ -285,7 +285,7 @@
                 await setDoc(doc(db, "users", user.uid), {
                     name: name,
                     email: email,
-                    profilePic: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`
+                    profilePic: `https://api.dicebear.com/9.x/notionists-neutral/svg?seed=${user.uid}`
                 });
 
                 alert('User registered successfully!');
