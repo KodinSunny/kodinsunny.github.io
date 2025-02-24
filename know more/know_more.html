@@ -1,97 +1,601 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="know_more.css"/>
-    <title>Portfolio</title>
+    <title>Futuristic Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            margin: 0;
+            background: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: -1;
+        }
+
+        .center-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #000;
+            color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .center-box:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .typing-text::after {
+            content: '|';
+            display: inline-block;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .continue-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            background: #fff;
+            color: #000;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Press Start 2P', cursive;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .continue-btn:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            /* Reduced blur effect */
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            /* Reduced blur effect */
+            -webkit-backdrop-filter: blur(5px);
+            /* Reduced blur effect */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        #comments {
+            width: 100%;
+            /* Full width */
+            max-height: 200px;
+            /* Set a fixed height */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            padding: 10px;
+            background: #63636318;
+            /* Dark background */
+            border-radius: 8px;
+            border: 1px solid #33333300;
+            color: rgb(0, 0, 0);
+            /* Text color */
+        }
+
+        /* Stylish Scrollbar */
+        #comments::-webkit-scrollbar {
+            width: 8px;
+            /* Scrollbar width */
+        }
+
+        #comments::-webkit-scrollbar-track {
+            background: #222;
+            /* Track color */
+            border-radius: 8px;
+        }
+
+        #comments::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ff7eb3, #ff758c);
+            /* Gradient scrollbar */
+            border-radius: 8px;
+        }
+
+        #comments::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #ff4e50, #ff7eb3);
+            /* Darker on hover */
+        }
+
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #423f3f;
+            float: right;
+            font-style: italic;
+        }
+
+        .glass:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            cursor: crosshair;
+        }
+
+        .portfolio-section {
+            display: none;
+            padding: 20px;
+        }
+    </style>
 </head>
+
 <body>
-    <div id="overview">
-        <div id="header"><h1>PORTFOLIO</h1></div>
-        <div id ="main">
-            <div id="container">
-                    <div class="card" id="Me"><h1>Myself</h1><p></div>
-                    <div class="card" id="school"><h1>Schooling</h1></div>
-                    <div class="card" id="interest"><h1>interest</h1></div>
-                    <div class="card" id="languages"><h1>languages</h1></div>
-            </div> 
+    <canvas id="particleCanvas"></canvas>
+    <div class="center-box" id="welcomeBox">
+        <div class="typing-text" id="typing">Welcome to Pranav</div>
+        <button class="continue-btn" onclick="showPortfolio()">Continue</button>
+    </div>
+
+    <div class="portfolio-section" id="portfolioSection">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 w-full">
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">About Me</h2>
+                <p class="text-gray-900">Hi, I'm John Doe, a passionate web developer with a love for creating stunning
+                    and functional websites. With over 5 years of experience in the industry, I have honed my skills in
+                    various web technologies and design principles.</p>
+            </div>
+            <div class="glass p-6 col-span-1 sm:col-span-2 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Projects</h2>
+                <p class="text-gray-900">Here are some of my recent projects:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Project A - A responsive e-commerce website built with React and Tailwind CSS.</li>
+                    <li>Project B - A dynamic portfolio website using Next.js and GSAP for animations.</li>
+                    <li>Project C - A real-time chat application developed with Node.js and Socket.io.</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1 sm:row-span-2">
+                <h2 class="text-xl font-bold mb-2 text-black">Contact</h2>
+                <p class="text-gray-900">Feel free to reach out to me:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Email: johndoe@example.com</li>
+                    <li>Phone: (123) 456-7890</li>
+                    <li>LinkedIn: linkedin.com/in/johndoe</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Skills</h2>
+                <p class="text-gray-900">I have expertise in:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>HTML, CSS, JavaScript</li>
+                    <li>React, Next.js</li>
+                    <li>Node.js, Express</li>
+                    <li>Tailwind CSS, Bootstrap</li>
+                    <li>Git, GitHub</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 sm:col-span-2 row-span-1 sm:row-span-2">
+                <h2 class="text-xl font-bold mb-2 text-black">Experience</h2>
+                <p class="text-gray-900">I have worked at:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Company A - Frontend Developer (2018-2020)</li>
+                    <li>Company B - Full Stack Developer (2020-2022)</li>
+                    <li>Company C - Senior Web Developer (2022-Present)</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Education</h2>
+                <p class="text-gray-900">My educational background:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Bachelor's in Computer Science - XYZ University</li>
+                    <li>Master's in Web Development - ABC Institute</li>
+                </ul>
+            </div>
+
+            <div class="glass p-6 col-span-1 row-span-1 Testimonials">
+                <h2 class="text-xl font-bold mb-2 text-black">Comments on me (I don't mind 😉)</h2>
+                <div>
+                    <input type="text" id="name-input" placeholder="Your Name">
+                    <input type="text" id="comment-input" placeholder="Enter your comment">
+                    <button onclick="submitComment()">Post</button>
+                </div>
+                <div id="comments"></div>
+            </div>
+
+
+            <div class="glass p-6 col-span-1 sm:col-span-2 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Blog</h2>
+                <p class="text-gray-900">Check out my latest blog posts:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li><a href="#" class="text-blue-400">Understanding React Hooks</a></li>
+                    <li><a href="#" class="text-blue-400">A Guide to CSS Grid</a></li>
+                    <li><a href="#" class="text-blue-400">Building a REST API with Node.js</a></li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Certifications</h2>
+                <p class="text-gray-900">My certifications:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Certified JavaScript Developer</li>
+                    <li>React Professional Certification</li>
+                    <li>Full Stack Web Developer Certification</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Awards</h2>
+                <p class="text-gray-900">Awards and recognitions:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Best Developer Award 2021</li>
+                    <li>Innovative Project Award 2020</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 sm:col-span-2 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Hobbies</h2>
+                <p class="text-gray-900">My hobbies and interests:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Photography</li>
+                    <li>Traveling</li>
+                    <li>Reading Tech Blogs</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Languages</h2>
+                <p class="text-gray-900">Languages I speak:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>English</li>
+                    <li>Spanish</li>
+                    <li>French</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Volunteer Work</h2>
+                <p class="text-gray-900">My volunteer experiences:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Web Developer at Non-Profit Organization</li>
+                    <li>Mentor at Coding Bootcamp</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Interests</h2>
+                <p class="text-gray-900">Things I am interested in:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Artificial Intelligence</li>
+                    <li>Blockchain Technology</li>
+                    <li>Cybersecurity</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Publications</h2>
+                <p class="text-gray-900">My published works:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Article on Web Development Trends</li>
+                    <li>Research Paper on Machine Learning</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 sm:col-span-2 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Workshops</h2>
+                <p class="text-gray-900">Workshops I have conducted:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Introduction to React</li>
+                    <li>Advanced JavaScript Techniques</li>
+                    <li>Building REST APIs with Node.js</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Achievements</h2>
+                <p class="text-gray-900">My notable achievements:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Developed a successful open-source project</li>
+                    <li>Contributed to major tech conferences</li>
+                </ul>
+            </div>
+            <div class="glass p-6 col-span-1 row-span-1">
+                <h2 class="text-xl font-bold mb-2 text-black">Community Involvement</h2>
+                <p class="text-gray-900">My involvement in the tech community:</p>
+                <ul class="text-gray-900 list-disc list-inside">
+                    <li>Organizer of local tech meetups</li>
+                    <li>Speaker at various tech events</li>
+                </ul>
+            </div>
         </div>
     </div>
-    <script>
-        const cards = document.querySelectorAll('.card');
-        const container = document.querySelectorAll('#container');
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        cards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translate(-50px, -50px)';
-    
-        setTimeout(() => {
-            card.style.transition = 'transform 1s ease-out, opacity 1s ease-out';
-            card.style.transform = 'translate(0, 0)';
-            card.style.opacity = '1';
-                }, index * 200);
+    <script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        let maxParticles = window.innerWidth < 768 ? 40 : 100;  // Fewer particles on mobile
+        const connectionDistance = 220;
+        let mouse = { x: null, y: null };
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.radius = 2;
+                this.speedX = (Math.random() - 0.5) * 1.2;
+                this.speedY = (Math.random() - 0.5) * 1.2;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = "#000000";
+                ctx.fill();
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+        }
+
+        function createParticles() {
+            particles = [];  // Clear old particles on resize
+            for (let i = 0; i < maxParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        const particleConnectionDistance = 110;
+
+        function drawLines() {
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                let dx = mouse.x - p.x;
+                let dy = mouse.y - p.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < connectionDistance) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.strokeStyle = `rgba(0, 0, 0, ${(1 - distance / connectionDistance)})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p1 = particles[i];
+                    let p2 = particles[j];
+                    let dx = p1.x - p2.x;
+                    let dy = p1.y - p2.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < particleConnectionDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(0, 0, 0, ${(1 - distance / particleConnectionDistance)})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            drawLines();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            maxParticles = window.innerWidth < 768 ? 40 : 100;  // Update particle count on resize
+            createParticles();
+        });
+
+        function typeEffect(element, text, speed) {
+            let i = 0;
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML = text.slice(0, i + 1);
+                    i++;
+                    setTimeout(typing, speed);
+                }
+            }
+            typing();
+        }
+
+        const typingElement = document.getElementById("typing");
+        typeEffect(typingElement, "Welcome to Pranav", 100);
+
+        function showPortfolio() {
+            document.getElementById('welcomeBox').style.display = 'none';
+            document.getElementById('portfolioSection').style.display = 'block';
+            document.body.style.overflow = 'auto';
+        }
+
+        createParticles();
+        animate();
+
+    </script>
+    <script>
+        function showPortfolio() {
+            // Fade out the welcome box
+            gsap.to("#welcomeBox", {
+                opacity: 0, y: -50, duration: 0.5, onComplete: function () {
+                    document.getElementById("welcomeBox").style.display = "none";
+                    document.getElementById("portfolioSection").style.display = "grid"; // Show portfolio section
+
+                    // Animate portfolio items
+                    gsap.from(".glass", {
+                        opacity: 0,
+                        y: 50,
+                        duration: 0.6,
+                        stagger: 0.2,
+                        ease: "power2.out"
+                    });
+                }
+            });
+        }
+
+        function showPortfolio() {
+            gsap.to("#welcomeBox", {
+                opacity: 0, y: -50, duration: 0.5, onComplete: () => {
+                    document.getElementById("welcomeBox").style.display = "none";
+                    document.getElementById("portfolioSection").style.display = "block";
+                    gsap.from(".glass", { opacity: 0, y: 50, duration: 0.5, stagger: 0.2 });
+
+                    // Enable scrolling after animation
+                    document.body.style.overflowY = "auto";
+                }
+            });
+        }
+
+        // Wait for the DOM to be fully loaded
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Select all elements with the class "glass"
+            gsap.utils.toArray(".glass").forEach((box) => {
+                gsap.from(box, {
+                    opacity: 0,
+                    y: 50,
+                    duration: 0.6,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: box,
+                        start: "top 80%",  // Start animation when box reaches 80% of viewport
+                        toggleActions: "play none none none",
+                    }
+                });
+            });
         });
 
 
-cards.forEach(card => {
-        // Desktop-specific behavior using 'mousemove'
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
+    </script>
+    <script>
+        const cards = document.querySelectorAll('.glass');
+        const container = document.querySelectorAll('#portfolio-section');
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+
+        cards.forEach(card => {
+            // Desktop-specific behavior using 'mousemove'
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                // Apply desktop scaling and movement
+                card.style.transform = `scale(1) translate(${x * 0.05}px, ${y * 0.05}px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Reset the card position when the mouse leaves
+                card.style.transform = `translate(0, 0)`;
+            });
+        });
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
 
-            // Apply desktop scaling and movement
-            card.style.transform = `scale(2) translate(${x * -0.2}px, ${y * 0.3}px)`;   
+            // Apply transformation to all cards based on container's cursor position
+            cards.forEach(card => {
+                card.style.transform += ` translate(${x * -0.01}px, ${y * 0.01}px)`;
+            });
         });
 
-        card.addEventListener('mouseleave', () => {
-            // Reset the card position when the mouse leaves
-            card.style.transform = `translate(0, 0)`;
+        container.addEventListener('mouseleave', () => {
+            // Reset the transformation on each card when the mouse leaves the container
+            cards.forEach(card => {
+                card.style.transform = `translate(0, 0)`;
+            });
         });
-});
-
-if (isMobile) {
-    // Mobile-specific behavior using 'touchmove'
-    container.addEventListener('touchmove', (e) => {
-        const rect = container.getBoundingClientRect();
-        const x = e.touches[0].clientX - rect.left - rect.width / 2;
-        const y = e.touches[0].clientY - rect.top - rect.height / 2;
-
-        // Apply transformation to all cards based on touch movement
-        cards.forEach(card => {
-            card.style.transform += `rotate(90deg) translate(${x * -0.05}px, ${y * 0.05}px)`;    
-        });
-    });
-
-    container.addEventListener('touchend', () => {
-        // Reset the transformation on each card when the touch ends
-        cards.forEach(card => {
-            card.style.transform = `translate(0, 0)`;
-        });
-    });
-} else {
-    // Desktop-specific behavior using 'mousemove'
-    container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-
-        // Apply transformation to all cards based on container's cursor position
-        cards.forEach(card => {
-            card.style.transform += ` translate(${x * -0.1}px, ${y * 0.1}px)`;    
-        });
-    });
-
-    container.addEventListener('mouseleave', () => {
-        // Reset the transformation on each card when the mouse leaves the container
-        cards.forEach(card => {
-            card.style.transform = `translate(0, 0)`;
-        });
-    });
-}
-
     </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "YOUR_FIREBASE_API_KEY", // Replace with your Firebase API Key
+            authDomain: "portfolio-ce615.firebaseapp.com",
+            projectId: "portfolio-ce615",
+            storageBucket: "portfolio-ce615.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ✅ Comment Submission
+        async function submitComment() {
+            const nameInput = document.getElementById("name-input").value.trim();
+            const commentInput = document.getElementById("comment-input").value.trim();
+            if (nameInput && commentInput) {
+                try {
+                    await addDoc(collection(db, "comments"), {
+                        name: nameInput,
+                        text: commentInput,
+                        timestamp: new Date()
+                    });
+                    document.getElementById("comment-input").value = "";
+                } catch (error) {
+                    console.error("Error posting comment:", error);
+                }
+            }
+        }
+        window.submitComment = submitComment;
+
+        // ✅ Real-time Comment Fetch
+        onSnapshot(collection(db, "comments"), (snapshot) => {
+            const commentsDiv = document.getElementById("comments");
+            commentsDiv.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const { name, text, timestamp } = doc.data();
+                const date = new Date(timestamp.seconds * 1000);
+                const formattedTime = date.toLocaleString();
+                const commentDiv = document.createElement("div");
+                commentDiv.className = "comment-box";
+                commentDiv.innerHTML = `<strong>${name}</strong><br>${text} <span class='timestamp'>${formattedTime}</span>`;
+                commentsDiv.appendChild(commentDiv);
+            });
+        });
+    </script>
+
+
 </body>
+
 </html>

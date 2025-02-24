@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="know_more.css"/>
+    <title>Portfolio</title>
+</head>
+<body>
+    <div id="overview">
+        <div id="header"><h1>PORTFOLIO</h1></div>
+        <div id ="main">
+            <div id="container">
+                    <div class="card" id="Me"><h1>Myself</h1><p></div>
+                    <div class="card" id="school"><h1>Schooling</h1></div>
+                    <div class="card" id="interest"><h1>interest</h1></div>
+                    <div class="card" id="languages"><h1>languages</h1></div>
+            </div> 
+        </div>
+    </div>
+    <script>
+        const cards = document.querySelectorAll('.card');
+        const container = document.querySelectorAll('#container');
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translate(-50px, -50px)';
+    
+        setTimeout(() => {
+            card.style.transition = 'transform 1s ease-out, opacity 1s ease-out';
+            card.style.transform = 'translate(0, 0)';
+            card.style.opacity = '1';
+                }, index * 200);
+        });
+
+
+cards.forEach(card => {
+        // Desktop-specific behavior using 'mousemove'
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            // Apply desktop scaling and movement
+            card.style.transform = `scale(2) translate(${x * -0.2}px, ${y * 0.3}px)`;   
+        });
+
+        card.addEventListener('mouseleave', () => {
+            // Reset the card position when the mouse leaves
+            card.style.transform = `translate(0, 0)`;
+        });
+});
+
+if (isMobile) {
+    // Mobile-specific behavior using 'touchmove'
+    container.addEventListener('touchmove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.touches[0].clientX - rect.left - rect.width / 2;
+        const y = e.touches[0].clientY - rect.top - rect.height / 2;
+
+        // Apply transformation to all cards based on touch movement
+        cards.forEach(card => {
+            card.style.transform += `rotate(90deg) translate(${x * -0.05}px, ${y * 0.05}px)`;    
+        });
+    });
+
+    container.addEventListener('touchend', () => {
+        // Reset the transformation on each card when the touch ends
+        cards.forEach(card => {
+            card.style.transform = `translate(0, 0)`;
+        });
+    });
+} else {
+    // Desktop-specific behavior using 'mousemove'
+    container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        // Apply transformation to all cards based on container's cursor position
+        cards.forEach(card => {
+            card.style.transform += ` translate(${x * -0.1}px, ${y * 0.1}px)`;    
+        });
+    });
+
+    container.addEventListener('mouseleave', () => {
+        // Reset the transformation on each card when the mouse leaves the container
+        cards.forEach(card => {
+            card.style.transform = `translate(0, 0)`;
+        });
+    });
+}
+
+    </script>
+</body>
+</html>
