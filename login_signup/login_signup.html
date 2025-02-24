@@ -179,6 +179,7 @@
         <img id="profile-pic" src="" alt="Profile Picture"
             style="width: 80px; height: 80px; border-radius: 50%; display: none;">
         <h3 id="user-email"></h3>
+        <button id="logout-btn" style="background-color: #ff5e57; color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">LOGOUT</button>
     </div>
 
     <div class="container" id="container">
@@ -215,7 +216,6 @@
                     <p>🆕 And if not registered yet, sign up here 👇</p>
                     <button class="ghost" id="signUp">SIGN UP</button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -223,7 +223,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -242,6 +242,7 @@
         const signUpButton = document.getElementById('signUp');
         const loginButton = document.getElementById('login');
         const container = document.getElementById('container');
+        const logoutBtn = document.getElementById('logout-btn');
 
         function updateOverlayVisibility() {
             if (container.classList.contains('right-panel-active')) {
@@ -303,14 +304,25 @@
             const password = document.getElementById('login-password').value;
 
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                await signInWithEmailAndPassword(auth, email, password);
                 alert('User logged in successfully!');
+                window.location.href = "https://www.heymahodaye.site";
             } catch (error) {
                 if (error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
                     alert("Invalid credentials. Please check your email and password.");
                 } else {
                     alert(error.message);
                 }
+            }
+        });
+
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                alert('User logged out successfully!');
+                window.location.href = "https://www.heymahodaye.site";
+            } catch (error) {
+                alert('Error logging out: ' + error.message);
             }
         });
 
@@ -322,11 +334,12 @@
                     userEmail.textContent = userDoc.data().email;
                     profilePic.src = userDoc.data().profilePic;
                     profilePic.style.display = "block";
+                    container.style.display = "none"; // Hide the login/signup forms
                 }
+            } else {
+                userInfo.style.display = "none";
+                container.style.display = "flex"; // Show the login/signup forms
             }
         });
     </script>
-
 </body>
-
-</html>
