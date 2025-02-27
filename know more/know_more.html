@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <style>
@@ -62,21 +63,130 @@
             }
         }
 
-        .continue-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            border: none;
-            background: #fff;
-            color: #000;
-            font-size: 14px;
-            cursor: pointer;
+        .button-54 {
             font-family: 'Press Start 2P', cursive;
-            transition: background 0.3s, color 0.3s;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-decoration: none;
+            text-transform: uppercase;
+            background-color: #000000;
+            color: #ffffff;
+            cursor: pointer;
+            border: 3px solid;
+            margin-top: 20px;
+            padding: 0.25em 0.5em;
+            box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
 
-        .continue-btn:hover {
-            background: #000;
-            color: #fff;
+        .button-54:active {
+            box-shadow: 0px 0px 0px 0px;
+            top: 5px;
+            left: 5px;
+        }
+
+        /* CSS */
+        .button-82-pushable {
+            position: relative;
+            border: none;
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+            outline-offset: 4px;
+            transition: filter 250ms;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin-top: 20px;
+            /* Added margin */
+        }
+
+        .button-82-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            background: hsl(0deg 0% 0% / 0.25);
+            will-change: transform;
+            transform: translateY(2px);
+            transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+        }
+
+        .button-82-edge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            background: linear-gradient(to left,
+                    hsl(340deg 100% 16%) 0%,
+                    hsl(340deg 100% 32%) 8%,
+                    hsl(340deg 100% 32%) 92%,
+                    hsl(340deg 100% 16%) 100%);
+        }
+
+        .button-82-front {
+            display: block;
+            position: relative;
+            padding: 8px 60px;
+            /* Reduced height, increased width */
+            border-radius: 12px;
+            font-size: 1rem;
+            /* Slightly smaller text */
+            color: white;
+            background: hsl(0, 100%, 50%);
+            will-change: transform;
+            transform: translateY(-4px);
+            transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+        }
+
+        @media (min-width: 768px) {
+            .button-82-front {
+                font-size: 1.1rem;
+                padding: 8px 80px;
+                /* Adjusted for larger screens */
+            }
+        }
+
+        .button-82-pushable:hover {
+            filter: brightness(110%);
+            -webkit-filter: brightness(110%);
+        }
+
+        .button-82-pushable:hover .button-82-front {
+            transform: translateY(-6px);
+            transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+        }
+
+        .button-82-pushable:active .button-82-front {
+            transform: translateY(-2px);
+            transition: transform 34ms;
+        }
+
+        .button-82-pushable:hover .button-82-shadow {
+            transform: translateY(4px);
+            transition: transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+        }
+
+        .button-82-pushable:active .button-82-shadow {
+            transform: translateY(1px);
+            transition: transform 34ms;
+        }
+
+        .button-82-pushable:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        @media (min-width: 768px) {
+            .button-54 {
+                padding: 0.25em 0.75em;
+            }
         }
 
         .glass {
@@ -149,6 +259,144 @@
             display: none;
             padding: 20px;
         }
+
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* Inward shadow */
+            transform: scale(0.98);
+            /* Slight scaling for depth */
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 15px;
+        }
+
+        .card h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        .card p {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .card button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .card button:hover {
+            background: #cc0000;
+        }
+
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading svg {
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .youtubeholder {
+            padding: 0px;
+        }
+    </style>
+    <style>
+        @keyframes scrollText {
+            0% {
+                transform: translateX(10%);
+            }
+
+            /* Starts slightly inside */
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .scrolling-text-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 10px 0;
+            position: relative;
+            background: transparent;
+        }
+
+        .scrolling-text {
+            display: inline-block;
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            white-space: nowrap;
+            animation: scrollText 15s linear infinite;
+            color: black;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        /* Fade effect on edges */
+        .scrolling-text-container::before,
+        .scrolling-text-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 10%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+            z-index: 1;
+        }
+
+        .scrolling-text-container::before {
+            left: 0;
+        }
+
+        .scrolling-text-container::after {
+            right: 0;
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 
@@ -156,14 +404,21 @@
     <canvas id="particleCanvas"></canvas>
     <div class="center-box" id="welcomeBox">
         <div class="typing-text" id="typing">Welcome to Pranav</div>
-        <button class="continue-btn" onclick="showPortfolio()">Continue</button>
+        <button class="button-54" onclick="showPortfolio()">Continue</button>
+    </div>
+
+    <div class="loading" id="loading">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22l8-5V7l-8 5V2L4 7v10l8 5z" />
+        </svg>
     </div>
 
     <div class="portfolio-section" id="portfolioSection">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 w-full">
             <div class="glass p-6 col-span-1 row-span-1">
                 <h2 class="text-xl font-bold mb-2 text-black">About Me</h2>
-                <p class="text-gray-900">Hi, I'm Pranav kumar, a passionate web developer with a love for creating stunning
+                <p class="text-gray-900">Hi, I'm Pranav kumar, a passionate web developer with a love for creating
+                    stunning
                     and functional websites. With over 2 years of experience in the school, I have honed my skills in
                     various web technologies and design principles.</p>
             </div>
@@ -176,14 +431,35 @@
                     <li>Project C - A real-time chat application developed with Node.js and Socket.io.</li>
                 </ul>
             </div>
-            <div class="glass p-6 col-span-1 row-span-1 sm:row-span-2">
-                <h2 class="text-xl font-bold mb-2 text-black">Contact</h2>
-                <p class="text-gray-900">Feel free to reach out to me:</p>
-                <ul class="text-gray-900 list-disc list-inside">
-                    <li>Email: sunny.pranav2006@gmail.com</li>
-                    <li>Phone: +91 9311398811</li>
-                    <li>LinkedIn: linkedin.com/in/johndoe</li>
-                </ul>
+            <div class="glass p-3 col-span-1 row-span-1 sm:row-span-2 youtubeholder">
+                <div class="scrolling-text-container">
+                    <div class="scrolling-text">
+                        My YouTube • मेरा यूट्यूब • 私のユーチューブ • Mi YouTube • يوتيوب الخاص بي • 我的优酷 • Mon YouTube
+                    </div>
+                </div>
+                <!-- Card Container -->
+                <div class="card-container">
+                    <div class="card">
+                        <div class="blurpanel"></div>
+                        <h3>Pranav kodin</h3>
+                        <p>Welcome to Channel 1! Subscribe for awesome content.</p>
+                        <button class="button-82-pushable" role="button"
+                            onclick="openChannel('https://www.youtube.com/channel1')"><span
+                                class="button-82-shadow"></span><span class="button-82-edge"></span><span
+                                class="button-82-front text">Open</span></button>
+
+                    </div>
+                    <div class="card">
+                        <h3>Channel 2</h3>
+                        <div class="blurpanel"></div>
+                        <p>Welcome to Channel 2! Subscribe for awesome content.</p>
+                        <button class="button-82-pushable" role="button"
+                            onclick="openChannel('https://www.youtube.com/channel1')"><span
+                                class="button-82-shadow"></span><span class="button-82-edge"></span><span
+                                class="button-82-front text">Open</span></button>
+
+                    </div>
+                </div>
             </div>
             <div class="glass p-6 col-span-1 row-span-1">
                 <h2 class="text-xl font-bold mb-2 text-black">Skills</h2>
@@ -436,7 +712,7 @@
         }
 
         const typingElement = document.getElementById("typing");
-        typeEffect(typingElement, "Welcome to Pranav", 100);
+        typeEffect(typingElement, "Welcome to Pranav", 50);
 
         function showPortfolio() {
             document.getElementById('welcomeBox').style.display = 'none';
@@ -517,7 +793,7 @@
                 const y = e.clientY - rect.top - rect.height / 2;
 
                 // Apply desktop scaling and movement
-                card.style.transform = `scale(1) translate(${x * 0.05}px, ${y * 0.05}px)`;
+                card.style.transform = `scale(1) translate(${x * 0.02}px, ${y * 0.02}px)`;
             });
 
             card.addEventListener('mouseleave', () => {
@@ -593,6 +869,18 @@
                 commentsDiv.appendChild(commentDiv);
             });
         });
+    </script>
+    <script>
+        // Simulate loading
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+        }, 300);
+
+        function openChannel(url) {
+            setTimeout(() => {
+                window.open(url, '_blank');
+            }, 300);
+        }
     </script>
 
 
