@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Realtime Chat</title>
+    <script type="module">
+        // ✅ Import Firebase properly
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, setDoc, getDocs, doc, onSnapshot, serverTimestamp, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+        // 🔥 Firebase Config (Replace with your details)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAcyBLG5mcrxyEwbBsyq4xX2Hh2Es6L1Ok",
+            authDomain: "portfolio-ce615.firebaseapp.com",
+            projectId: "portfolio-ce615",
+            storageBucket: "portfolio-ce615.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+        };
+        
+        // ✅ Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore();
+
+        let currentUserEmail = null;
+        let selectedUserEmail = null;
+
+        // ✅ Google Login
+        document.getElementById("loginBtn").addEventListener("click", async () => {
+            const provider = new GoogleAuthProvider();
+            try {
+                const result = await signInWithPopup(auth, provider);
+                currentUserEmail = result.user.email;
+
+                // Save user in Firestore
+                await setDoc(doc(db, "users", currentUserEmail), { email: currentUserEmail });
+
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("chatContainer").style.display = "flex";
+                loadUsers();
+            } catch (error) {
+                console.error("Login Error:", error);
+            }
+        });
+
+        // ✅ Logout Function
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            await signOut(auth);
+            document.getElementById("loginSection").style.display = "block";
+            document.getElementById("chatContainer").style.display = "none";
+        });
+
+        // ✅ Fetch & Display Online Users
+        async function loadUsers() {
+            const usersListDiv = document.getElementById("usersList");
+            usersListDiv.innerHTML = "<h3>Active Users</h3>";
+
+            const usersSnapshot = await getDocs(collection(db, "users"));
+            usersSnapshot.forEach(doc => {
+                const userEmail = doc.data().email;
+                if (userEmail !== currentUserEmail) {
+                    const userElement = document.createElement("p");
+                    userElement.classList.add("user");
+                    userElement.innerText = userEmail;
+                    userElement.dataset.email = userEmail;
+                    userElement.addEventListener("click", () => selectUser(userEmail));
+                    usersListDiv.appendChild(userElement);
+                }
+            });
+        }
+
+        // ✅ Select User to Chat
+        function selectUser(userEmail) {
+            selectedUserEmail = userEmail;
+            document.getElementById("chatWith").innerText = `Chat with: ${userEmail}`;
+            document.getElementById("chatBox").style.display = "block";
+            loadMessages();
+        }
+
+        // ✅ Fix Firestore Index Issue
+        async function loadMessages() {
+            if (!selectedUserEmail) return;
+            const chatID = [currentUserEmail, selectedUserEmail].sort().join("_");
+
+            // **🔧 Fix: Create Index if needed**
+            try {
+                const messagesRef = query(collection(db, "messages"), where("chatID", "==", chatID), orderBy("timestamp"));
+                onSnapshot(messagesRef, snapshot => {
+                    const messagesDiv = document.getElementById("messages");
+                    messagesDiv.innerHTML = "";
+                    snapshot.docs.forEach(doc => {
+                        const data = doc.data();
+                        const msgClass = data.sender === currentUserEmail ? "my-message" : "";
+                        messagesDiv.innerHTML += `<p class="message ${msgClass}"><strong>${data.sender}:</strong> ${data.text}</p>`;
+                    });
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                });
+            } catch (error) {
+                console.error("Firestore Index Error:", error);
+                alert("🔥 Firestore Index Needed! Go to Firestore Console and create an index for `chatID` and `timestamp`.");
+            }
+        }
+
+        // ✅ Send Message
+        document.getElementById("sendBtn").addEventListener("click", async () => {
+            if (!selectedUserEmail) return alert("Select a user first!");
+            const messageInput = document.getElementById("messageInput").value;
+            if (!messageInput) return;
+
+            const chatID = [currentUserEmail, selectedUserEmail].sort().join("_");
+
+            await addDoc(collection(db, "messages"), {
+                sender: currentUserEmail,
+                receiver: selectedUserEmail,
+                text: messageInput,
+                timestamp: serverTimestamp(),
+                chatID: chatID
+            });
+
+            document.getElementById("messageInput").value = "";
+        });
+
+        // ✅ Detect User Login & Load Users
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                currentUserEmail = user.email;
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("chatContainer").style.display = "flex";
+                loadUsers();
+            }
+        });
+
+    </script>
+
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #1e1e1e; color: white; text-align: center; }
+        #chatContainer { display: flex; max-width: 900px; margin: auto; margin-top: 50px; display: none; }
+        #usersList { width: 30%; background: #333; padding: 15px; border-radius: 5px; }
+        .user { padding: 10px; margin: 5px; cursor: pointer; background: #444; border-radius: 5px; transition: 0.3s; }
+        .user:hover { background: #666; }
+        #chatBox { width: 70%; padding: 15px; border-radius: 5px; background: #222; display: none; }
+        .messages { height: 400px; overflow-y: auto; background: #111; padding: 10px; border-radius: 5px; }
+        .message-input { display: flex; margin-top: 10px; }
+        input { flex: 1; padding: 10px; border: none; border-radius: 5px; }
+        button { background: #ff4500; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+        .message { text-align: left; background: #444; padding: 8px; border-radius: 5px; margin: 5px 0; }
+        .my-message { text-align: right; background: #ff4500; color: white; }
+        #loginBtn, #logoutBtn { padding: 10px 20px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>🔥 Realtime Chat</h2>
+
+    <div id="loginSection">
+        <button id="loginBtn">Login with Google</button>
+    </div>
+
+    <div id="chatContainer">
+        <button id="logoutBtn">Logout</button>
+        <div id="usersList"><h3>Active Users</h3></div>
+        <div id="chatBox">
+            <h3 id="chatWith">Select a user to chat</h3>
+            <div class="messages" id="messages"></div>
+            <div class="message-input">
+                <input type="text" id="messageInput" placeholder="Type a message...">
+                <button id="sendBtn">➤</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
