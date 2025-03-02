@@ -57,11 +57,18 @@
             animation: blink 0.7s infinite;
         }
 
+        .mynameis::after {
+            content: '|';
+            display: inline-block;
+            animation: blink 0.7s infinite;
+        }
+
         @keyframes blink {
             50% {
                 opacity: 0;
             }
         }
+
 
         .button-54 {
             font-family: 'Press Start 2P', cursive;
@@ -270,6 +277,7 @@
             background: white;
             border-radius: 20px;
             padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s ease, transform 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -329,6 +337,39 @@
         .youtubeholder {
             padding: 0px;
         }
+
+        /* CSS */
+        input {
+            width: 100%;
+            max-width: 350px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            background: rgba(255, 255, 255, 0.2);
+            /* Glass effect */
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            outline: none;
+            transition: 0.3s ease-in-out;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Placeholder Styling */
+        input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+            font-style: italic;
+        }
+
+        /* Focus Effect */
+        input:focus {
+            border-color: #fbe0f4;
+            /* Green highlight */
+            box-shadow: 0 0 10px #ffc2ef;
+            background: rgba(255, 255, 255, 0.4);
+        }
     </style>
     <style>
         @keyframes scrollText {
@@ -383,13 +424,56 @@
             transform: rotate(180deg);
         }
     </style>
+    <style buttons>
+        /* CSS */
+        .button-74 {
+            background-color: #fbe0f4;
+            border: 1.5px solid #422800;
+            border-radius: 20px;
+            box-shadow: #422800 2px 2px 0 0;
+            color: #422800;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 14px;
+            /* Smaller font */
+            padding: 0 12px;
+            margin: 10px;
+            margin-right: auto;
+            /* Less padding */
+            line-height: 28px;
+            /* Smaller height */
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .button-74:hover {
+            background-color: #fff;
+        }
+
+        .button-74:active {
+            box-shadow: #422800 1px 1px 0 0;
+            transform: translate(1px, 1px);
+        }
+
+        @media (min-width: 768px) {
+            .button-74 {
+                min-width: 90px;
+                /* Smaller button */
+                padding: 0 18px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <canvas id="particleCanvas"></canvas>
     <div class="center-box" id="welcomeBox">
         <div class="typing-text" id="typing">Welcome to Pranav</div>
-        <button class="button-54" onclick="showPortfolio()">Continue</button>
+        <button class="button-54" onclick="showPortfolio(); mynameis();">Continue</button>
     </div>
 
     <div class="loading" id="loading">
@@ -400,24 +484,15 @@
 
     <div class="portfolio-section" id="portfolioSection">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 w-full">
-            <div class="glass p-6 col-span-1 row-span-1">
-                <h2 class="text-xl font-bold mb-2 text-black">About Me</h2>
-                <p class="text-gray-900">Hi, I'm Pranav kumar, a passionate web developer with a love for creating
-                    stunning
-                    and functional websites. With over 2 years of experience in the school, I have honed my skills in
-                    various web technologies and design principles.</p>
+            <div class="glass p-6 col-span-3 row-span-1 flex justify-center items-center">
+                <h1 class="w-full text-center text-4xl font-bold tracking-widest font-[Orbitron] mynameis"
+                    id="mynameis">
+                </h1>
             </div>
-            <div class="glass p-6 col-span-1 sm:col-span-2 row-span-1">
-                <h2 class="text-xl font-bold mb-2 text-black">Projects</h2>
-                <p class="text-gray-900">Here are some of my recent projects:</p>
-                <ul class="text-gray-900 list-disc list-inside">
-                    <li>Project A - A responsive e-commerce website built with React and Tailwind CSS.</li>
-                    <li>Project B - A dynamic portfolio website using Next.js and GSAP for animations.</li>
-                    <li>Project C - A real-time chat application developed with Node.js and Socket.io.</li>
-                </ul>
-            </div>
-            <div class="glass p-3 col-span-1 row-span-1 sm:row-span-2 youtubeholder">
 
+
+
+            <div class="glass p-3 col-span-1 row-span-1 sm:row-span-2 youtubeholder">
             </div>
             <div class="glass p-6 col-span-1 row-span-1">
                 <h2 class="text-xl font-bold mb-2 text-black">Skills</h2>
@@ -431,13 +506,12 @@
                 </ul>
             </div>
             <div class="glass p-6 col-span-1 sm:col-span-2 row-span-1 sm:row-span-2">
-                <h2 class="text-xl font-bold mb-2 text-black">Experience</h2>
-                <p class="text-gray-900">I have worked at:</p>
-                <ul class="text-gray-900 list-disc list-inside">
-                    <li>Company A - Frontend Developer (2018-2020)</li>
-                    <li>Company B - Full Stack Developer (2020-2022)</li>
-                    <li>Company C - Senior Web Developer (2022-Present)</li>
-                </ul>
+                <h2 class="text-xl font-bold mb-2 text-black">About Me</h2>
+                <p class="text-gray-900">Hi, I'm Pranav kumar, a passionate web developer with a love for creating
+                    stunning
+                    and functional websites. With over 2 years of experience in the school, I have honed my skills in
+                    various web technologies and design principles.</p>
+
             </div>
             <div class="glass p-6 col-span-1 row-span-1">
                 <h2 class="text-xl font-bold mb-2 text-black">Education</h2>
@@ -453,7 +527,7 @@
                 <div>
                     <input type="text" id="name-input" placeholder="Your Name">
                     <input type="text" id="comment-input" placeholder="Enter your comment">
-                    <button onclick="submitComment()">Post</button>
+                    <button class="button-74" role="button" onclick="submitComment()">Button</button>
                 </div>
                 <div id="comments"></div>
             </div>
@@ -477,23 +551,21 @@
                 <!-- Card Container -->
                 <div class="card-container">
                     <div class="card">
-                        <img src="https://www.heymahodaye.site/static/images/dog.jpg" alt="Channel 1">
-                        <h3>Pranav kodin</h3>
-                        <p>Welcome to Channel 1! Subscribe for awesome content.</p>
+                        <h3 style="font-family: 'Orbitron', sans-serif;">Pranav Kodin</h3>
+                        <p>Ctrl + C, Ctrl + V, and somehow I call it coding! (kidding) T-T</p>
                         <button class="button-82-pushable" role="button"
-                            onclick="openChannel('https://www.youtube.com/channel1')"><span
+                            onclick="openChannel('https://www.youtube.com/@pranavkodin')"><span
                                 class="button-82-shadow"></span><span class="button-82-edge"></span><span
                                 class="button-82-front text">Open</span></button>
 
                     </div>
                     <div class="card">
-                        <h3>Channel 2</h3>
-                        <img src="https://www.heymahodaye.site/static/images/cat.jpg" alt="Channel 1">
-                        <p>Welcome to Channel 2! Subscribe for awesome content.</p>
-                        <button class="button-82-pushable" role="button"
-                            onclick="openChannel('https://www.youtube.com/channel1')"><span
-                                class="button-82-shadow"></span><span class="button-82-edge"></span><span
-                                class="button-82-front text">Open</span></button>
+                        <h3 style="font-family: 'Orbitron', sans-serif;">Sexy Samosa</h3>
+                        <p style="size: 2rem;">I play games, come live, I scream -then I upload it all! <3< /p>
+                                <button class="button-82-pushable" role="button"
+                                    onclick="openChannel('https://www.youtube.com/@sexysamosa')"><span
+                                        class="button-82-shadow"></span><span class="button-82-edge"></span><span
+                                        class="button-82-front text">Open</span></button>
 
                     </div>
                 </div>
@@ -691,7 +763,17 @@
         }
 
         const typingElement = document.getElementById("typing");
-        typeEffect(typingElement, "Welcome to Pranav", 50);
+        const typingElement2 = document.getElementById("mynameis");
+        typeEffect(typingElement, "You’ve Unlocked My Portfolio!", 50);
+
+        function mynameisss() {
+            let typingElement2 = document.getElementById("mynameis");
+            typeEffect(typingElement2, "They call me Pranav Kumar", 50);
+        }
+
+        function mynameis() {
+            setTimeout(mynameisss, 1000); // Start mynameis() after 1 second
+        }
 
         function showPortfolio() {
             document.getElementById('welcomeBox').style.display = 'none';
