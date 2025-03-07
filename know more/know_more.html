@@ -9,10 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+
+    </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400');
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
         body {
@@ -205,8 +210,23 @@
             /* Reduced blur effect */
             -webkit-backdrop-filter: blur(5px);
             /* Reduced blur effect */
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 0px solid rgba(255, 255, 255, 0.3);
             transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        #social {
+            background: rgba(255, 255, 255, 0);
+            font-family: 'Orbitron', sans-serif;
+            /* Reduced blur effect */
+            height: 100px !important;
+            border-radius: 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            /* Reduced blur effect */
+            -webkit-backdrop-filter: blur(0);
+            /* Reduced blur effect */
+            border: 0px solid rgba(255, 255, 255, 0);
+            transition: transform 00s, box-shadow 0s;
         }
 
         #comments {
@@ -467,6 +487,213 @@
             }
         }
     </style>
+    <style>
+        #social ul {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 8px;
+            margin: 0;
+            padding: 0;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        #social ul li {
+            list-style: none;
+            margin: 5px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        #social ul li a i {
+            font-size: 30px;
+            color: #262626;
+            line-height: 60px;
+            transition: 0.5s;
+            padding-right: 10px;
+        }
+
+        #social ul li a span {
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            top: 20px;
+            color: #262626;
+            letter-spacing: 1px;
+            transition: 0.5s;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+
+        #social ul li a {
+            text-decoration: none;
+            display: block;
+            width: 160px;
+            height: 60px;
+            background: #fff;
+            text-align: left;
+            padding-left: 15px;
+            transform: rotate(-30deg) skew(25deg) translate(0, 0);
+            transition: 0.5s;
+            box-shadow: -15px 15px 8px rgba(0, 0, 0, 0.5);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        #social ul li a:before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: -15px;
+            height: 100%;
+            width: 15px;
+            background: #b1b1b1;
+            transition: 0.5s;
+            transform: rotate(0deg) skewY(-45deg);
+        }
+
+        #social ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: -8px;
+            height: 15px;
+            width: 100%;
+            background: #b1b1b1;
+            transition: 0.5s;
+            transform: rotate(0deg) skewX(-45deg);
+        }
+
+        #social ul li a:hover {
+            transform: rotate(-30deg) skew(25deg) translate(15px, -10px);
+            box-shadow: -40px 40px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        #social ul li:hover i {
+            color: #fff;
+        }
+
+        #social ul li:hover span {
+            color: #fff;
+        }
+
+        /* Facebook */
+        #social ul li:hover:nth-child(1) a {
+            background: #3b5998;
+        }
+
+        #social ul li:hover:nth-child(1) a:before {
+            background: #365492;
+        }
+
+        #social ul li:hover:nth-child(1) a:after {
+            background: #4a69ad;
+        }
+
+        /* Twitter */
+        #social ul li:hover:nth-child(2) a {
+            background: #00aced;
+        }
+
+        #social ul li:hover:nth-child(2) a:before {
+            background: #097aa5;
+        }
+
+        #social ul li:hover:nth-child(2) a:after {
+            background: #53b9e0;
+        }
+
+        /* Google */
+        #social ul li:hover:nth-child(3) a {
+            background: #dd4b39;
+        }
+
+        #social ul li:hover:nth-child(3) a:before {
+            background: #b33a2b;
+        }
+
+        #social ul li:hover:nth-child(3) a:after {
+            background: #e66a5a;
+        }
+
+        /* Instagram */
+        #social ul li:hover:nth-child(4) a {
+            background: #e4405f;
+        }
+
+        #social ul li:hover:nth-child(4) a:before {
+            background: #d81c3f;
+        }
+
+        #social ul li:hover:nth-child(4) a:after {
+            background: #e46880;
+        }
+
+        /* GitHub */
+        #social ul li:hover:nth-child(5) a {
+            background: #333;
+        }
+
+        #social ul li:hover:nth-child(5) a:before {
+            background: #222;
+        }
+
+        #social ul li:hover:nth-child(5) a:after {
+            background: #444;
+        }
+
+        /* Reddit */
+        #social ul li:hover:nth-child(6) a {
+            background: #FF4500;
+        }
+
+        #social ul li:hover:nth-child(6) a:before {
+            background: #E03E00;
+        }
+
+        #social ul li:hover:nth-child(6) a:after {
+            background: #FF6633;
+        }
+
+        /* Discord */
+        #social ul li:hover:nth-child(7) a {
+            background: #5865F2;
+        }
+
+        #social ul li:hover:nth-child(7) a:before {
+            background: #4a54c4;
+        }
+
+        #social ul li:hover:nth-child(7) a:after {
+            background: #6b77ff;
+        }
+
+        /* LinkedIn */
+        #social ul li:hover:nth-child(8) a {
+            background: #0077b5;
+        }
+
+        #social ul li:hover:nth-child(8) a:before {
+            background: #005983;
+        }
+
+        #social ul li:hover:nth-child(8) a:after {
+            background: #009bd3;
+        }
+
+        /* YouTube */
+        #social ul li:hover:nth-child(9) a {
+            background: #FF0000;
+        }
+
+        #social ul li:hover:nth-child(9) a:before {
+            background: #CC0000;
+        }
+
+        #social ul li:hover:nth-child(9) a:after {
+            background: #FF3333;
+        }
+    </style>
 </head>
 
 <body>
@@ -596,31 +823,6 @@
                     <li>French</li>
                 </ul>
             </div>
-            <div class="glass p-6 col-span-1 row-span-1">
-                <h2 class="text-xl font-bold mb-2 text-black">Volunteer Work</h2>
-                <p class="text-gray-900">My volunteer experiences:</p>
-                <ul class="text-gray-900 list-disc list-inside">
-                    <li>Web Developer at Non-Profit Organization</li>
-                    <li>Mentor at Coding Bootcamp</li>
-                </ul>
-            </div>
-            <div class="glass p-6 col-span-1 row-span-1">
-                <h2 class="text-xl font-bold mb-2 text-black">Interests</h2>
-                <p class="text-gray-900">Things I am interested in:</p>
-                <ul class="text-gray-900 list-disc list-inside">
-                    <li>Artificial Intelligence</li>
-                    <li>Blockchain Technology</li>
-                    <li>Cybersecurity</li>
-                </ul>
-            </div>
-            <div class="glass p-6 col-span-1 row-span-1">
-                <h2 class="text-xl font-bold mb-2 text-black">Publications</h2>
-                <p class="text-gray-900">My published works:</p>
-                <ul class="text-gray-900 list-disc list-inside">
-                    <li>Article on Web Development Trends</li>
-                    <li>Research Paper on Machine Learning</li>
-                </ul>
-            </div>
             <div class="glass p-6 col-span-1 sm:col-span-2 row-span-1">
                 <h2 class="text-xl font-bold mb-2 text-black">Workshops</h2>
                 <p class="text-gray-900">Workshops I have conducted:</p>
@@ -644,7 +846,71 @@
                 <ul class="text-gray-900 list-disc list-inside">
                     <li>Organizer of local tech meetups</li>
                     <li>Speaker at various tech events</li>
+                    <button id="invertButton">Invert Colors</button>
+
                 </ul>
+            </div>
+            <div class="p-6 col-span-4 row-span-1" id="social">
+                <ul>
+                    <li>
+                        <a href="https://www.facebook.com/hey.mahodaye/" target="_blank">
+                            <i class="bx bxl-facebook"></i>
+                            <span>Facebook</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://x.com/pranavk38351492" target="_blank">
+                            <i class="bx bxl-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.google.com/" target="_blank">
+                            <i class="bx bxl-google"></i>
+                            <span>Google</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/hey.mahodaye" target="_blank">
+                            <i class="bx bxl-instagram"></i>
+                            <span>Instagram</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/PranavKodin/" target="_blank">
+                            <i class="bx bxl-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.reddit.com/user/wtf_pranav/" target="_blank">
+                            <i class="bx bxl-reddit"></i>
+                            <span>Reddit</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://discord.com/users/733690477148373093" target="_blank">
+                            <i class="bx bxl-discord"></i>
+                            <span>Discord</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/pranav-kumar-a3178530a/" target="_blank">
+                            <i class="bx bxl-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.youtube.com/@sexysamosa" target="_blank">
+                            <i class="bx bxl-youtube"></i>
+                            <span>YouTube</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class=" p-2 col-span-4 row-span-1" style="text-align: center;">
+                <h3 style="letter-spacing: 15px; word-spacing: 50px; ">----- FOLLOW ME ON SOCIAL MEDIA -----</h3>
             </div>
         </div>
     </div>
@@ -654,6 +920,8 @@
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        let darkMode = false; // Theme state
+
 
         let particles = [];
         let maxParticles = window.innerWidth < 768 ? 40 : 100;  // Fewer particles on mobile
@@ -671,7 +939,7 @@
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = "#000000";
+                ctx.fillStyle = darkMode ? "#ffffff" : "#000000";
                 ctx.fill();
             }
             update() {
@@ -702,7 +970,7 @@
                     ctx.beginPath();
                     ctx.moveTo(p.x, p.y);
                     ctx.lineTo(mouse.x, mouse.y);
-                    ctx.strokeStyle = `rgba(0, 0, 0, ${(1 - distance / connectionDistance)})`;
+                    ctx.strokeStyle = `rgba(${darkMode ? "255, 255, 255" : "0, 0, 0"}, ${(1 - distance / connectionDistance)})`;
                     ctx.lineWidth = 1;
                     ctx.stroke();
                 }
@@ -720,7 +988,7 @@
                         ctx.beginPath();
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(p2.x, p2.y);
-                        ctx.strokeStyle = `rgba(0, 0, 0, ${(1 - distance / particleConnectionDistance)})`;
+                        ctx.strokeStyle = `rgba(${darkMode ? "255, 255, 255" : "0, 0, 0"}, ${(1 - distance / connectionDistance)})`;
                         ctx.lineWidth = 0.8;
                         ctx.stroke();
                     }
@@ -737,6 +1005,27 @@
             drawLines();
             requestAnimationFrame(animate);
         }
+
+        const button = document.createElement("button");
+        button.innerText = "      ";
+        button.style.position = "absolute";
+        button.style.top = "10px";
+        button.style.left = "10px";
+        button.style.zIndex = "1000";
+        document.body.appendChild(button);
+
+        button.addEventListener("click", () => {
+            darkMode = !darkMode;
+            document.body.style.background = darkMode ? "#000" : "#fff";
+
+            const glassDivs = document.querySelectorAll(".glass");
+            glassDivs.forEach(div => {
+                div.style.color = darkMode ? "#ffffff" : "#000000";  // Change text color
+            });
+
+
+        });
+
 
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.x;
@@ -943,6 +1232,56 @@
             }, 300);
         }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        function makeBlocksFall() {
+            gsap.set("#social ul li", {
+                y: -500, // Start position above
+                opacity: 0 // Hidden initially
+            });
+
+            gsap.to("#social ul li", {
+                y: 0, // Move blocks to original position
+                opacity: 1, // Fade in
+                rotation: 10, // Slight tilt
+                stagger: 0.15, // Delay each block's fall
+                ease: "bounce.out", // Realistic bounce effect
+                duration: 1.5 // Fall duration
+            });
+
+            // Add spacing dynamically
+            document.querySelectorAll("#social ul li").forEach((item) => {
+                item.style.marginBottom = "15px"; // Adjust spacing
+            });
+        }
+
+        // Intersection Observer to detect scrolling
+        function setupScrollTrigger() {
+            const observer = new IntersectionObserver(
+                (entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            makeBlocksFall();
+                            observer.unobserve(entry.target); // Run only once
+                        }
+                    });
+                },
+                { threshold: 0.3 } // Trigger when 30% of the element is visible
+            );
+
+            const target = document.querySelector("#social");
+            if (target) {
+                observer.observe(target);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener("DOMContentLoaded", setupScrollTrigger);
+    </script>
+
+
+
+
 
 
 </body>
