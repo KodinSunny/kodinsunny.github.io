@@ -11,6 +11,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+
     <style>
 
     </style>
@@ -20,11 +23,18 @@
         @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400');
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+        * {
+            cursor: none !important;
+            /* Hides the default cursor everywhere */
+        }
+
+
         body {
             margin: 0;
             background: #ffffff;
             font-family: 'Roboto', sans-serif;
             overflow: hidden;
+            cursor: none !important;
         }
 
         canvas {
@@ -279,7 +289,6 @@
         .glass:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            cursor: crosshair;
         }
 
         .portfolio-section {
@@ -694,9 +703,69 @@
             background: #FF3333;
         }
     </style>
+    <style>
+        .cursor,
+        .cursor-follower {
+            position: fixed;
+            /* Ensures cursor moves with scroll */
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            user-select: none;
+            z-index: 10000;
+        }
+
+        /* Main Cursor */
+        .cursor {
+            background-color: black;
+            /* Set default black */
+            border: 1px solid black;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.75, -1.27, 0.3, 2.33),
+                opacity 0.2s cubic-bezier(0.75, -0.27, 0.3, 1.33);
+            transform: scale(1);
+        }
+
+        /* Cursor Follower */
+        .cursor-follower {
+            background-color: rgba(0, 0, 0, 0.3);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transition: transform 0.6s cubic-bezier(0.75, -1.27, 0.3, 2.33),
+                opacity 0.2s cubic-bezier(0.75, -0.27, 0.3, 1.33);
+            transform: translate(5px, 5px);
+        }
+
+        /* Cursor Click Effect */
+        .cursor.active {
+            opacity: 0.5;
+            transform: scale(2);
+        }
+
+        /* Cursor Follower Click Effect */
+        .cursor-follower.active {
+            opacity: 0.7;
+            transform: scale(2);
+        }
+
+        /* Cursor Hover Effect */
+        .cursor.hovered {
+            opacity: 0.08;
+        }
+
+        /* Cursor Follower Hover Effect */
+        .cursor-follower.hovered {
+            transform: scale(3);
+        }
+    </style>
 </head>
 
 <body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
     <canvas id="particleCanvas"></canvas>
     <div class="center-box" id="welcomeBox">
         <div class="typing-text" id="typing">Welcome to Pranav</div>
@@ -788,7 +857,7 @@
                     </div>
                     <div class="card">
                         <h3 style="font-family: 'Orbitron', sans-serif;">Sexy Samosa</h3>
-                        <p style="size: 2rem;">I play games, come live, I scream -then I upload it all! <3</p>
+                        <p style="size: 2rem;">I play games, come live, I scream -then I upload it all! <3< /p>
                                 <button class="button-82-pushable" role="button"
                                     onclick="openChannel('https://www.youtube.com/@sexysamosa')"><span
                                         class="button-82-shadow"></span><span class="button-82-edge"></span><span
@@ -1244,7 +1313,7 @@
                 y: 0, // Move blocks to original position
                 opacity: 1, // Fade in
                 rotation: 10, // Slight tilt
-                stagger: 0.15, // Delay each block's fall
+                stagger: 0.3, // Delay each block's fall
                 ease: "bounce.out", // Realistic bounce effect
                 duration: 1.5 // Fall duration
             });
@@ -1277,6 +1346,71 @@
 
         // Initialize when page loads
         document.addEventListener("DOMContentLoaded", setupScrollTrigger);
+    </script>
+    <script>
+        $(document).ready(function () {
+            var cursor = $(".cursor"),
+                follower = $(".cursor-follower");
+
+            var posX = 0,
+                posY = 0;
+            var mouseX = 0,
+                mouseY = 0;
+
+            // Smooth cursor movement
+            TweenMax.to({}, 0.016, {
+                repeat: -1,
+                onRepeat: function () {
+                    posX += (mouseX - posX) / 9;
+                    posY += (mouseY - posY) / 9;
+
+                    TweenMax.set(follower, {
+                        css: {
+                            left: posX - 12,
+                            top: posY - 12
+                        }
+                    });
+
+                    TweenMax.set(cursor, {
+                        css: {
+                            left: mouseX,
+                            top: mouseY
+                        }
+                    });
+                }
+            });
+
+            // Update cursor position on mousemove
+            $(document).on("mousemove", function (e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Handle clicking (increase follower size)
+            $(document).on("mousedown", function () {
+                follower.addClass("active");
+            });
+
+            $(document).on("mouseup", function () {
+                setTimeout(() => {
+                    follower.removeClass("active");
+                }, 200); // Delay to make the effect visible
+            });
+
+            // Handle hovering on interactive elements
+            $("a, button").on("mouseenter", function () {
+                cursor.addClass("hovered");
+                follower.addClass("hovered");
+            });
+
+            $("a, button").on("mouseleave", function () {
+                cursor.removeClass("hovered");
+                follower.removeClass("hovered");
+            });
+        });
+
+
+
     </script>
 
 
