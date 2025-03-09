@@ -511,7 +511,7 @@
 
         #social ul li {
             list-style: none;
-            margin: 5px;
+            margin: 8px;
             font-family: 'Orbitron', sans-serif;
         }
 
@@ -702,6 +702,15 @@
         #social ul li:hover:nth-child(9) a:after {
             background: #FF3333;
         }
+
+        @media (max-width: 600px) {
+            #social ul {
+                display: grid;
+                gap: 5px;
+                position: static;
+                transform: none;
+            }
+        }
     </style>
     <style>
         .cursor,
@@ -753,7 +762,8 @@
 
         /* Cursor Hover Effect */
         .cursor.hovered {
-            opacity: 0.08;
+            background-color: rgb(255, 255, 255);
+            border: white;
         }
 
         /* Cursor Follower Hover Effect */
@@ -857,7 +867,7 @@
                     </div>
                     <div class="card">
                         <h3 style="font-family: 'Orbitron', sans-serif;">Sexy Samosa</h3>
-                        <p style="size: 2rem;">I play games, come live, I scream -then I upload it all! <3< /p>
+                        <p style="size: 2rem;">I play games, come live, I scream -then I upload it all! <3 </p>
                                 <button class="button-82-pushable" role="button"
                                     onclick="openChannel('https://www.youtube.com/@sexysamosa')"><span
                                         class="button-82-shadow"></span><span class="button-82-edge"></span><span
