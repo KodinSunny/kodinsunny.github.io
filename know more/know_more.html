@@ -770,12 +770,38 @@
         .cursor-follower.hovered {
             transform: scale(3);
         }
+
+        /* Tooltip Styles */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 255, 255, 0.9);
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 10px;
+            line-height: 1;
+            white-space: nowrap;
+            pointer-events: none;
+            transform: scale(0);
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+            font-family: 'Press Start 2P', cursive;
+            opacity: 0;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+            z-index: 100;
+        }
+
+        /* Animation effect */
+        .tooltip.show {
+            transform: scale(1);
+            opacity: 1;
+        }
     </style>
 </head>
 
 <body>
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
+    <div class="tooltip" id="tooltip"></div>
     <canvas id="particleCanvas"></canvas>
     <div class="center-box" id="welcomeBox">
         <div class="typing-text" id="typing">Welcome to Pranav</div>
@@ -798,7 +824,8 @@
 
 
 
-            <div class="glass p-3 col-span-1 row-span-1 sm:row-span-2 youtubeholder">
+            <div class="glass p-3 col-span-1 row-span-1 sm:row-span-2 picholder">
+                <img src="picofme.png" alt="My photo was here 🥲, Plz check your internet ">
             </div>
             <div class="glass p-6 col-span-1 row-span-1">
                 <h2 class="text-xl font-bold mb-2 text-black">Skills</h2>
@@ -858,7 +885,7 @@
                 <div class="card-container">
                     <div class="card">
                         <h3 style="font-family: 'Orbitron', sans-serif;">Pranav Kodin</h3>
-                        <p>Ctrl + C, Ctrl + V, and somehow I call it coding! (kidding) T-T</p>
+                        <p>Ctrl + C, Ctrl + V, and somehow I call it coding! (kidding)</p>
                         <button class="button-82-pushable" role="button"
                             onclick="openChannel('https://www.youtube.com/@pranavkodin')"><span
                                 class="button-82-shadow"></span><span class="button-82-edge"></span><span
@@ -1086,7 +1113,7 @@
         }
 
         const button = document.createElement("button");
-        button.innerText = "      ";
+        button.innerText = "siuuuuu";
         button.style.position = "absolute";
         button.style.top = "10px";
         button.style.left = "10px";
@@ -1422,6 +1449,71 @@
 
 
     </script>
+    <script>
+        const tooltip = document.getElementById("tooltip");
+        const greetings = [
+            "Hey there! 🚀",
+            "Nice to see you! 🎉",
+            "Welcome aboard! 🙌",
+            "High five! ✋",
+            "Sending virtual hugs 🤗",
+            "Glad you’re here! 😊",
+            "You found me! 👀",
+            "Stay awesome! ✨",
+            "Beep boop, greetings! 🤖",
+            "Ready for liftoff? 🚀"
+        ];
+
+
+        let typingInterval; // Store interval ID
+
+        document.addEventListener("mousemove", (event) => {
+            tooltip.style.top = `${event.clientY + 15}px`;
+            tooltip.style.left = `${event.clientX + 15}px`;
+        });
+
+        document.querySelectorAll(".picholder").forEach((item) => {
+            item.addEventListener("mouseenter", () => {
+                const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+                tooltip.textContent = "";
+                tooltip.classList.add("show");
+
+                clearInterval(typingInterval); // Stop any ongoing typing effect
+
+                let i = 0;
+                const typingSpeed = 50; // Adjust this for faster typing
+
+                typingInterval = setInterval(() => {
+                    if (i < randomGreeting.length) {
+                        tooltip.textContent += randomGreeting[i];
+                        i++;
+                    } else {
+                        clearInterval(typingInterval);
+                    }
+                }, typingSpeed);
+            });
+
+            item.addEventListener("mouseleave", () => {
+                clearInterval(typingInterval); // Stop typing when mouse leaves
+                tooltip.classList.remove("show");
+                tooltip.textContent = "";
+            });
+        });
+
+
+
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") { // Check if Enter key is pressed
+                    showPortfolio();
+                    mynameis(); // Run your function
+                }
+            });
+        });
+    </script>
+
 
 
 
