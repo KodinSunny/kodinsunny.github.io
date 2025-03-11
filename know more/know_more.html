@@ -34,7 +34,6 @@
             margin: 0;
             background: #ffffff;
             font-family: 'Roboto', sans-serif;
-            overflow: hidden;
             cursor: none !important;
         }
 
@@ -825,7 +824,7 @@
 
 
 
-            <div class="glass p-3 col-span-1 row-span-1 sm:row-span-2 picholder">
+            <div class="glass p-3 col-span-1 row-span-3 sm:row-span-3 picholder">
                 <img style="border-radius: inherit;" src="picofme.png" alt="My photo was here 🥲, Plz check your internet ">
             </div>
             <div class="glass p-6 col-span-1 row-span-1">
@@ -855,18 +854,6 @@
                     <li> crpf public school dwarka</li>
                 </ul>
             </div>
-
-            <div class="glass p-6 col-span-1 row-span-1 Testimonials">
-                <h2 class="text-xl font-bold mb-2 text-black">Comments on me (I don't mind 😉)</h2>
-                <div>
-                    <input type="text" id="name-input" placeholder="Your Name">
-                    <input type="text" id="comment-input" placeholder="Enter your comment">
-                    <button class="button-74" role="button" onclick="submitComment()">Post</button>
-                </div>
-                <div id="comments"></div>
-            </div>
-
-
             <div class="glass p-6 col-span-1 sm:col-span-2 row-span-1">
                 <h2 class="text-xl font-bold mb-2 text-black">Blog</h2>
                 <p class="text-gray-900">Check out my latest blog posts:</p>
@@ -1274,56 +1261,6 @@
             // Reset the transformation on each card when the mouse leaves the container
             cards.forEach(card => {
                 card.style.transform = `translate(0, 0)`;
-            });
-        });
-    </script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "YOUR_FIREBASE_API_KEY", // Replace with your Firebase API Key
-            authDomain: "portfolio-ce615.firebaseapp.com",
-            projectId: "portfolio-ce615",
-            storageBucket: "portfolio-ce615.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID",
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // ✅ Comment Submission
-        async function submitComment() {
-            const nameInput = document.getElementById("name-input").value.trim();
-            const commentInput = document.getElementById("comment-input").value.trim();
-            if (nameInput && commentInput) {
-                try {
-                    await addDoc(collection(db, "comments"), {
-                        name: nameInput,
-                        text: commentInput,
-                        timestamp: new Date()
-                    });
-                    document.getElementById("comment-input").value = "";
-                } catch (error) {
-                    console.error("Error posting comment:", error);
-                }
-            }
-        }
-        window.submitComment = submitComment;
-
-        // ✅ Real-time Comment Fetch
-        onSnapshot(collection(db, "comments"), (snapshot) => {
-            const commentsDiv = document.getElementById("comments");
-            commentsDiv.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const { name, text, timestamp } = doc.data();
-                const date = new Date(timestamp.seconds * 1000);
-                const formattedTime = date.toLocaleString();
-                const commentDiv = document.createElement("div");
-                commentDiv.className = "comment-box";
-                commentDiv.innerHTML = `<strong>${name}</strong><br>${text} <span class='timestamp'>${formattedTime}</span>`;
-                commentsDiv.appendChild(commentDiv);
             });
         });
     </script>

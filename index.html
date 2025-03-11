@@ -27,6 +27,137 @@
 
     gtag('config', 'G-H72L8XEPB4');
   </script>
+  <style buttons>
+    /* CSS */
+    .button-74 {
+      background-color: rgb(255, 94, 87);
+      border: 1.5px solid #422800;
+      border-radius: 20px;
+      box-shadow: #ffffff 2px 2px 0 0;
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-block;
+      font-weight: 600;
+      font-size: 14px;
+      /* Smaller font */
+      padding: 0 12px;
+      margin: 10px;
+      margin-right: auto;
+      /* Less padding */
+      line-height: 28px;
+      /* Smaller height */
+      text-align: center;
+      text-decoration: none;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .button-74:hover {
+      background-color: #fff;
+      color: #422800;
+    }
+
+    .button-74:active {
+      box-shadow: #ffffff 1px 1px 0 0;
+      transform: translate(1px, 1px);
+    }
+
+    input {
+      width: 100%;
+      max-width: 350px;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.2);
+      /* Glass effect */
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      outline: none;
+      transition: 0.3s ease-in-out;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-input{
+      width: auto;
+    }
+
+    /* Placeholder Styling */
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+      font-style: italic;
+    }
+
+    /* Focus Effect */
+    input:focus {
+      border-color: rgb(255, 94, 87);
+      /* Green highlight */
+      box-shadow: 0 0 10px rgb(255, 133, 126);
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    #comments {
+      width: 100%;
+      /* Full width */
+      height: 300px;
+      /* Set a fixed height */
+      overflow-y: auto;
+      /* Enable vertical scrolling */
+      padding: 10px;
+      background: #d6d6d618;
+      /* Dark background */
+      border-radius: 8px;
+      border: 1px solid #33333300;
+      color: rgb(255, 255, 255);
+      /* Text color */
+      overflow-y: auto;
+      /* Enables scrollbar */
+      max-height: 100%;
+      /* Ensures it doesn't exceed parent */
+    }
+
+    /* Stylish Scrollbar */
+    #comments::-webkit-scrollbar {
+      width: 8px;
+      /* Scrollbar width */
+    }
+
+    #comments::-webkit-scrollbar-track {
+      background: #222;
+      /* Track color */
+      border-radius: 8px;
+    }
+
+    #comments::-webkit-scrollbar-thumb {
+      background: linear-gradient(45deg, #ff7eb3, #ff758c);
+      /* Gradient scrollbar */
+      border-radius: 8px;
+    }
+
+    #comments::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(45deg, #ff4e50, #ff7eb3);
+      /* Darker on hover */
+    }
+
+
+    .timestamp {
+      font-size: 0.8em;
+      color: #aaa2a2;
+      float: right;
+      font-style: italic;
+    }
+
+    @media (min-width: 768px) {
+      .button-74 {
+        min-width: 90px;
+        /* Smaller button */
+        padding: 0 18px;
+      }
+    }
+  </style>
 </head>
 
 <body onload="fetchComments()">
@@ -65,14 +196,13 @@
   <div class="sidebar comments">
     <h2>Public Comments</h2>
     <div id="comment-section">
-      <textarea id="commentContent" placeholder="Type your comment here..."></textarea>
-      <input type="text" id="username" placeholder="Your Name">
-      <button onclick="submitComment()">Post Comment</button>
-      <div id="comments" class="comments-container"></div>
-      <button onclick="tooglecomments()" class="cta-button close-comments">close</button>
-      <div class="commentbox"></div>
-      <script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script>
-      <script>commentBox('5703374003503104-proj')</script>
+      <div>
+        <input type="text" id="name-input" placeholder="Your Name" class="comment-input">
+        <input type="text" id="comment-input" placeholder="Enter your comment" class="comment-input">
+        <button class="button-74" role="button" onclick="submitComment()">Post</button>
+        <button onclick="tooglecomments()" class="cta-button close-comments">close</button>
+      </div>
+      <div id="comments"></div>
     </div>
   </DIV>
   <div id="scroll_holder">
@@ -199,6 +329,56 @@
       }
     }
 
+  </script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_FIREBASE_API_KEY", // Replace with your Firebase API Key
+      authDomain: "portfolio-ce615.firebaseapp.com",
+      projectId: "portfolio-ce615",
+      storageBucket: "portfolio-ce615.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ✅ Comment Submission
+    async function submitComment() {
+      const nameInput = document.getElementById("name-input").value.trim();
+      const commentInput = document.getElementById("comment-input").value.trim();
+      if (nameInput && commentInput) {
+        try {
+          await addDoc(collection(db, "comments"), {
+            name: nameInput,
+            text: commentInput,
+            timestamp: new Date()
+          });
+          document.getElementById("comment-input").value = "";
+        } catch (error) {
+          console.error("Error posting comment:", error);
+        }
+      }
+    }
+    window.submitComment = submitComment;
+
+    // ✅ Real-time Comment Fetch
+    onSnapshot(collection(db, "comments"), (snapshot) => {
+      const commentsDiv = document.getElementById("comments");
+      commentsDiv.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const { name, text, timestamp } = doc.data();
+        const date = new Date(timestamp.seconds * 1000);
+        const formattedTime = date.toLocaleString();
+        const commentDiv = document.createElement("div");
+        commentDiv.className = "comment-box";
+        commentDiv.innerHTML = `<strong>${name}</strong><br>${text} <span class='timestamp'>${formattedTime}</span>`;
+        commentsDiv.appendChild(commentDiv);
+      });
+    });
   </script>
 </body>
 
