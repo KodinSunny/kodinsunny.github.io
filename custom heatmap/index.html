@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Contribution Heatmap Designer</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary-color: #06b6d4;
+            --text-color: #1e293b;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --inactive-day: #e2e8f0;
+            --active-day-1: #67e8f9;
+            --active-day-2: #22d3ee;
+            --active-day-3: #0ea5e9;
+            --active-day-4: #2563eb;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --button-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            margin: 0;
+            padding: 24px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        h2, h3 {
+            color: var(--text-color);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-top: 0;
+        }
+
+        .card {
+            background: var(--card-background);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .heatmap-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: auto;
+            padding: 10px 5px;
+            position: relative;
+            max-width: 100%;
+        }
+
+        .heatmap-scrollable {
+            min-width: min-content;
+        }
+
+        .months {
+            display: flex;
+            padding-left: 30px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .month {
+            width: 65px;
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .heatmap {
+            display: grid;
+            grid-template-rows: repeat(7, 12px);
+            grid-auto-flow: column;
+            gap: 2px;
+            padding: 5px;
+        }
+
+        .weekday-labels {
+            display: grid;
+            grid-template-rows: repeat(7, 12px);
+            gap: 2px;
+            padding: 5px 5px 5px 0;
+            font-size: 0.65rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .heatmap-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .day {
+            width: 12px;
+            height: 12px;
+            background-color: var(--inactive-day);
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .day.active {
+            transform: scale(1.1);
+        }
+
+        .day:hover {
+            transform: scale(1.15);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .day.inaccessible {
+            background-color: transparent;
+            pointer-events: none;
+        }
+
+        .day.active-1 { background-color: var(--active-day-1); }
+        .day.active-2 { background-color: var(--active-day-2); }
+        .day.active-3 { background-color: var(--active-day-3); }
+        .day.active-4 { background-color: var(--active-day-4); }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 180px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: var(--text-color);
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: var(--card-background);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            padding-right: 32px;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 140px;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: var(--button-shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            box-shadow: var(--button-shadow);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        /* Button icons */
+        .btn-icon {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .selected-dates {
+            max-height: 140px;
+            overflow-y: auto;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(226, 232, 240, 0.5);
+            margin-bottom: 16px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) transparent;
+        }
+
+        .date-chip {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin: 2px;
+            font-size: 0.8rem;
+        }
+
+        .selected-dates::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .selected-dates::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 6px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: var(--card-background);
+            font-family: monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .tooltip {
+            position: absolute;
+            background: var(--card-background);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 100;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .legend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0 5px;
+            font-size: 0.8rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: a2px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-color: #e2e8f0;
+                --background-color: #0f172a;
+                --card-background: #1e293b;
+                --inactive-day: #334155;
+            }
+            select, textarea {
+                background-color: #1e293b;
+                color: var(--text-color);
+                border-color: #334155;
+            }
+            .selected-dates {
+                background: rgba(51, 65, 85, 0.5);
+            }
+            .date-chip {
+                background: rgba(99, 102, 241, 0.2);
+            }
+        }
+
+        /* Animation for the day cells */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .day {
+            animation: fadeIn 0.5s ease forwards;
+            animation-delay: calc(var(--animation-order) * 0.01s);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h2>GitHub Contribution Designer</h2>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3>2024 Contribution Calendar</h3>
+            </div>
+            <div class="card-body">
+                <div class="heatmap-container">
+                    <div class="heatmap-scrollable">
+                        <div class="months"></div>
+                        <div class="heatmap-wrapper">
+                            <div class="weekday-labels">
+                                <div>Sun</div>
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
+                            </div>
+                            <div class="heatmap"></div>
+                        </div>
+                        
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--inactive-day);"></div>
+                                <span>No activity</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--active-day-1);"></div>
+                                <span>Low</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--active-day-2);"></div>
+                                <span>Medium</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--active-day-3);"></div>
+                                <span>High</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--active-day-4);"></div>
+                                <span>Max</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="heatLevel">Commits per day:</label>
+                            <select id="heatLevel">
+                                <option value="5">5 commits/day</option>
+                                <option value="10">10 commits/day</option>
+                                <option value="15">15 commits/day</option>
+                                <option value="20" selected>20 commits/day</option>
+                            </select>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="intensityLevel">Color intensity:</label>
+                            <select id="intensityLevel">
+                                <option value="1">Level 1 (Light)</option>
+                                <option value="2">Level 2</option>
+                                <option value="3">Level 3</option>
+                                <option value="4" selected>Level 4 (Dark)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button onclick="clearAll()" class="btn-danger">
+                            <svg class="btn-icon" viewBox="0 0 24 24">
+                                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6"></path>
+                            </svg>
+                            Clear All
+                        </button>
+                        <button onclick="generateScript()" class="btn-primary">
+                            <svg class="btn-icon" viewBox="0 0 24 24">
+                                <path d="M8 9l3 3-3 3M13 15h3"></path>
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            </svg>
+                            Generate Script
+                        </button>
+                        <button onclick="copyScript()" class="btn-secondary">
+                            <svg class="btn-icon" viewBox="0 0 24 24">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                            </svg>
+                            Copy to Clipboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="two-columns">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Selected Dates</h3>
+                </div>
+                <div class="card-body">
+                    <div class="selected-dates"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>PowerShell Commit Script</h3>
+                </div>
+                <div class="card-body">
+                    <textarea id="commitScript" readonly placeholder="Click 'Generate Script' to create your commit script based on selected dates."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip" id="tooltip"></div>
+    <div class="toast" id="toastMessage">
+        <svg class="btn-icon" viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5"></path>
+        </svg>
+        Script copied to clipboard!
+    </div>
+    
+    <script>
+        const heatmap = document.querySelector('.heatmap');
+        const selectedDatesDiv = document.querySelector('.selected-dates');
+        const commitScriptTextArea = document.getElementById('commitScript');
+        const monthsDiv = document.querySelector('.months');
+        const heatLevelSelect = document.getElementById('heatLevel');
+        const intensityLevelSelect = document.getElementById('intensityLevel');
+        const tooltip = document.getElementById('tooltip');
+        const toastMessage = document.getElementById('toastMessage');
+        const selectedDates = new Set();
+        let isMouseDown = false;
+        let isPainting = true;
+        
+        // Generate months
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        for (let i = 0; i < 12; i++) {
+            let monthLabel = document.createElement('div');
+            monthLabel.className = 'month';
+            monthLabel.textContent = monthNames[i];
+            monthsDiv.appendChild(monthLabel);
+        }
+        
+        // Generate calendar grid
+        let startDate = new Date("2023-12-31");
+        let currentColumn = 0;
+        const daysInYear = 366; // 2024 is a leap year
+        
+        for (let i = 0; i < daysInYear + 7; i++) {
+            let dayBox = document.createElement('div');
+            // Set animation delay
+            dayBox.style.setProperty('--animation-order', i);
+            
+            if (startDate.getFullYear() === 2023 || startDate.getFullYear() > 2024) {
+                dayBox.classList.add('day', 'inaccessible');
+            } else if (startDate.getFullYear() === 2024) {
+                dayBox.classList.add('day');
+                dayBox.dataset.date = startDate.toISOString().split('T')[0];
+                
+                // Tooltips
+                dayBox.addEventListener('mouseover', (e) => {
+                    const date = new Date(dayBox.dataset.date);
+                    const formattedDate = date.toLocaleDateString('en-US', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                    
+                    tooltip.textContent = formattedDate;
+                    tooltip.style.opacity = '1';
+                    tooltip.style.left = `${e.pageX + 10}px`;
+                    tooltip.style.top = `${e.pageY + 10}px`;
+                    
+                    if (isMouseDown) toggleDay(dayBox);
+                });
+                
+                dayBox.addEventListener('mouseout', () => {
+                    tooltip.style.opacity = '0';
+                });
+                
+                dayBox.addEventListener('mousedown', (e) => { 
+                    isMouseDown = true; 
+                    isPainting = !dayBox.classList.contains('active');
+                    if (e.button === 0) toggleDay(dayBox); 
+                });
+                
+                document.body.addEventListener('mouseup', () => isMouseDown = false);
+            }
+            
+            if (startDate.getDay() === 0 || i === 0) {
+                currentColumn++;
+            }
+            
+            heatmap.appendChild(dayBox);
+            startDate.setDate(startDate.getDate() + 1);
+        }
+        
+        // Enhanced toggle function with intensity levels
+        function toggleDay(dayBox) {
+            const date = dayBox.dataset.date;
+            const intensityLevel = intensityLevelSelect.value;
+            
+            if (isPainting) {
+                // Remove all active classes first
+                dayBox.classList.remove('active-1', 'active-2', 'active-3', 'active-4');
+                // Add the desired active class
+                dayBox.classList.add('active', `active-${intensityLevel}`);
+                selectedDates.add(date);
+            } else {
+                dayBox.classList.remove('active', 'active-1', 'active-2', 'active-3', 'active-4');
+                selectedDates.delete(date);
+            }
+            
+            updateSelectedDates();
+        }
+        
+        function clearAll() {
+            document.querySelectorAll('.day').forEach(day => {
+                day.classList.remove('active', 'active-1', 'active-2', 'active-3', 'active-4');
+            });
+            selectedDates.clear();
+            updateSelectedDates();
+            commitScriptTextArea.value = "";
+        }
+        
+        function updateSelectedDates() {
+            const sortedDates = Array.from(selectedDates).sort();
+            if (sortedDates.length === 0) {
+                selectedDatesDiv.innerHTML = "<em>No dates selected</em>";
+            } else {
+                selectedDatesDiv.innerHTML = sortedDates.map(date => {
+                    const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+                        weekday: 'short', 
+                        month: 'short', 
+                        day: 'numeric' 
+                    });
+                    return `<span class="date-chip">${formattedDate}</span>`;
+                }).join(' ');
+            }
+        }
+        
+        function generateScript() {
+            let script = "# GitHub Contribution Script\n# Generated on " + new Date().toLocaleString() + "\n\n";
+            let commitCount = parseInt(heatLevelSelect.value);
+            
+            if (selectedDates.size === 0) {
+                script = "# No dates selected. Please select dates on the heatmap.";
+            } else {
+                Array.from(selectedDates).sort().forEach((date) => {
+                    script += `# Commits for ${date}\n`;
+                    for (let i = 0; i < commitCount; i++) {
+                        script += `$env:GIT_COMMITTER_DATE = '${date}T12:${i}:00'\n`;
+                        script += `git commit --allow-empty -m "Commit ${i + 1} on ${date}" --date="${date}T12:${i}:00"\n\n`;
+                    }
+                });
+                script += "# Push all commits\ngit push origin main\n";
+                script += "\n# End of script";
+            }
+            
+            commitScriptTextArea.value = script;
+            // Scroll to the script section
+            commitScriptTextArea.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function copyScript() {
+            if (commitScriptTextArea.value.trim() === "") {
+                generateScript();
+            }
+            
+            commitScriptTextArea.select();
+            document.execCommand("copy");
+            
+            // Show toast message with animation
+            toastMessage.classList.add('show');
+            setTimeout(() => {
+                toastMessage.classList.remove('show');
+            }, 2000);
+        }
+        
+        // Handle mouse movement outside the heatmap
+        document.addEventListener('mousemove', (e) => {
+            if (tooltip.style.opacity === '1') {
+                tooltip.style.left = `${e.pageX + 10}px`;
+                tooltip.style.top = `${e.pageY + 10}px`;
+            }
+        });
+        
+        // Initialize
+        updateSelectedDates();
+    </script>
+</body>
+</html>
